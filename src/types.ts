@@ -15,3 +15,5 @@ export interface SpriteColors {
 	TeamColors: PlayerColors;
 	OutlineColors: PlayerColors;
 }
+
+export type ColorEditor = "picker" | "hex" | "rgb" | "hsv";

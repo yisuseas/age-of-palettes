@@ -22,7 +22,25 @@
 			</ul>
 			<div id="editor">
 				<h2></h2>
-				<input type="color" name="picker" id="picker" />
+				<div class="row">
+					<input type="color" name="picker" id="picker" />
+				</div>
+				<div class="row">
+					<label for="hex">hex</label>
+					<input type="text" name="hex" id="hex" />
+				</div>
+				<div class="row">
+					<span>rgb</span>
+					<input type="number" name="rgb-r" id="rgb-r" min="0" max="255" />
+					<input type="number" name="rgb-g" id="rgb-g" min="0" max="255" />
+					<input type="number" name="rgb-b" id="rgb-b" min="0" max="255" />
+				</div>
+				<div class="row">
+					<span>hsv</span>
+					<input type="number" name="hsv-h" id="hsv-h" min="0" max="360" />
+					<input type="number" name="hsv-s" id="hsv-s" min="0" max="100" />
+					<input type="number" name="hsv-v" id="hsv-v" min="0" max="100" />
+				</div>
 			</div>
 		</div>
 		<script type="module" src="/src/main.ts"></script>

@@ -1,7 +1,7 @@
-import type { PlayerModel } from "../Models/PlayerModel";
-import type { PlayerName } from "../types";
-import type { PaletteController } from "./PaletteController";
-import type { PlayerController } from "./PlayerController";
+import type { PlayerModel } from "./Models/PlayerModel";
+import type { PlayerName } from "./types";
+import type { PaletteController } from "./Controllers/PaletteController";
+import type { PlayerController } from "./Controllers/PlayerController";
 
 export type EventMap = {
 	"change-player": {
