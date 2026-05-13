@@ -1,0 +1,19 @@
+.hidden {
+	display: none;
+}
+
+#player-list {
+	li.selected {
+		background-color: gray;
+	}
+
+	button {
+		background-color: var(--bg);
+		color: var(--fg);
+	}
+}
+
+button,
+input[type="color"] {
+	cursor: pointer;
+}
