@@ -16,4 +16,4 @@ export interface SpriteColors {
 	OutlineColors: PlayerColors;
 }
 
-export type ColorEditor = "picker" | "hex" | "rgb" | "hsv";
+export type ColorEditor = "picker" | "hex" | "rgb" | "hsv" | "hsl";

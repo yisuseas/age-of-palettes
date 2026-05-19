@@ -16,6 +16,11 @@ export class PlayerView {
 		s: HTMLInputElement;
 		v: HTMLInputElement;
 	};
+	hsl: {
+		h: HTMLInputElement;
+		s: HTMLInputElement;
+		l: HTMLInputElement;
+	};
 	preview: HTMLImageElement;
 
 	constructor() {
@@ -32,6 +37,11 @@ export class PlayerView {
 			h: document.querySelector("input#hsv-h")!,
 			s: document.querySelector("input#hsv-s")!,
 			v: document.querySelector("input#hsv-v")!,
+		};
+		this.hsl = {
+			h: document.querySelector("input#hsl-h")!,
+			s: document.querySelector("input#hsl-s")!,
+			l: document.querySelector("input#hsl-l")!,
 		};
 		this.preview = document.querySelector("img#preview")!;
 	}
@@ -69,6 +79,16 @@ export class PlayerView {
 			this.hsv.h.value = h;
 			this.hsv.s.value = s;
 			this.hsv.v.value = v;
+		}
+
+		if (skip !== "hsl") {
+			const [h, s, l] = color
+				.hsl()
+				.array()
+				.map((n) => Math.round(n).toString());
+			this.hsl.h.value = h;
+			this.hsl.s.value = s;
+			this.hsl.l.value = l;
 		}
 
 		this.preview.style.backgroundColor = color.toString();

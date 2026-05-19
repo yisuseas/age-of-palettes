@@ -13,6 +13,7 @@ const MAX_CHANNEL_VALUE = {
 	h: 360,
 	s: 100,
 	v: 100,
+	l: 100,
 } as const;
 
 type Channel = keyof typeof MAX_CHANNEL_VALUE;
@@ -79,7 +80,7 @@ export class PlayerController {
 			return int;
 		};
 
-		(["rgb", "hsv"] as const).forEach((space) => {
+		(["rgb", "hsv", "hsl"] as const).forEach((space) => {
 			(Array.from(space) as Channel[]).forEach((channel) => {
 				// @ts-expect-error
 				const inputElement = this.view[space][channel] as HTMLInputElement;
