@@ -16,6 +16,7 @@ export class PlayerView {
 		s: HTMLInputElement;
 		v: HTMLInputElement;
 	};
+	preview: HTMLImageElement;
 
 	constructor() {
 		this.editor = document.querySelector("div#editor")!;
@@ -32,6 +33,7 @@ export class PlayerView {
 			s: document.querySelector("input#hsv-s")!,
 			v: document.querySelector("input#hsv-v")!,
 		};
+		this.preview = document.querySelector("img#preview")!;
 	}
 
 	render(name: PlayerName, color: ColorInstance) {
@@ -68,6 +70,8 @@ export class PlayerView {
 			this.hsv.s.value = s;
 			this.hsv.v.value = v;
 		}
+
+		this.preview.style.backgroundColor = color.toString();
 	}
 
 	clear() {

@@ -17,3 +17,13 @@ button,
 input[type="color"] {
 	cursor: pointer;
 }
+
+.img-container {
+	position: relative;
+
+	img {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+}

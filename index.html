@@ -27,7 +27,7 @@
 				</div>
 				<div class="row">
 					<label for="hex">hex</label>
-					<input type="text" name="hex" id="hex" />
+					<input type="text" name="hex" id="hex" autocomplete="off" />
 				</div>
 				<div class="row">
 					<span>rgb</span>
@@ -40,6 +40,15 @@
 					<input type="number" name="hsv-h" id="hsv-h" min="0" max="360" />
 					<input type="number" name="hsv-s" id="hsv-s" min="0" max="100" />
 					<input type="number" name="hsv-v" id="hsv-v" min="0" max="100" />
+				</div>
+				<div class="img-container">
+					<img
+						id="preview"
+						src="/preview.png"
+						width="1780"
+						height="780"
+						alt="preview"
+					/>
 				</div>
 			</div>
 		</div>
