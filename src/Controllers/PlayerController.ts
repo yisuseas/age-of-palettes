@@ -55,9 +55,7 @@ export class PlayerController {
 		const updateColor = (newColor: ColorInstance, skip?: ColorEditor) => {
 			this.model.set(newColor);
 			this.view.updateEditor(newColor, skip);
-			this.mediator.dispatch("change-swatch", {
-				cssProps: this.model.cssProps(),
-			});
+			this.mediator.dispatch("change-swatch", this.model.props());
 		};
 
 		this.view.picker.addEventListener("input", () => {

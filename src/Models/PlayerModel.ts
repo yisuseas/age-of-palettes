@@ -1,6 +1,6 @@
 import type { ColorInstance } from "color";
 import Color from "color";
-import type { PlayerName } from "../types";
+import type { PlayerName, ViewProps } from "../types";
 import defaultColors from "../spritecolors.json";
 
 const WHITE = new Color("white").toString();
@@ -39,7 +39,10 @@ export class PlayerModel {
 		this.unit = unit;
 	}
 
-	cssProps() {
-		return `--bg:${this.background()};--fg:${this.foreground()};`;
+	props(): ViewProps {
+		return {
+			bg: this.background(),
+			fg: this.foreground()
+		}
 	}
 }

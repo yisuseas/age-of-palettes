@@ -1,6 +1,6 @@
 import { ALL_PLAYER_NAMES } from "../constant";
 import type { PaletteModel } from "../Models/PaletteModel";
-import type { PlayerName } from "../types";
+import type { PlayerName, ViewProps } from "../types";
 import type { PaletteView } from "../Views/PaletteView";
 import type { Mediator } from "../Mediator";
 
@@ -50,8 +50,8 @@ export class PaletteController {
 		this.mediator.dispatch("change-player", payload);
 	}
 
-	updateSwatch(cssProps: string) {
+	updateSwatch(props: ViewProps) {
 		this.model.updateURL();
-		this.view.render(this.selectedPlayer!, cssProps, true);
+		this.view.render(this.selectedPlayer!, props, true);
 	}
 }

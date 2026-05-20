@@ -17,3 +17,9 @@ export interface SpriteColors {
 }
 
 export type ColorEditor = "picker" | "hex" | "rgb" | "hsv" | "hsl";
+
+export interface ViewProps {
+	bg: string,
+	fg: string
+}
+

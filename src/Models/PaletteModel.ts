@@ -1,4 +1,4 @@
-import type { PlayerName } from "../types";
+import type { PlayerName, ViewProps } from "../types";
 import { PlayerModel } from "./PlayerModel";
 import { ALL_PLAYER_NAMES } from "../constant";
 
@@ -46,10 +46,10 @@ export class PaletteModel {
 		history.replaceState(null, "", url);
 	}
 
-	getAll(): [PlayerName, string][] {
+	getAll(): [PlayerName, ViewProps][] {
 		return ALL_PLAYER_NAMES.map((name) => [
 			name,
-			this.playerData[name].cssProps(),
+			this.playerData[name].props()
 		]);
 	}
 }

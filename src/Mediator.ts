@@ -1,5 +1,5 @@
 import type { PlayerModel } from "./Models/PlayerModel";
-import type { PlayerName } from "./types";
+import type { PlayerName, ViewProps } from "./types";
 import type { PaletteController } from "./Controllers/PaletteController";
 import type { PlayerController } from "./Controllers/PlayerController";
 
@@ -9,9 +9,7 @@ export type EventMap = {
 		model: PlayerModel;
 	} | null;
 
-	"change-swatch": {
-		cssProps: string;
-	};
+	"change-swatch": ViewProps;
 };
 
 type EventName = keyof EventMap;
@@ -41,7 +39,7 @@ export class Mediator {
 			this.playerController.set(payload as EventMap["change-player"]);
 		} else if (eventName === "change-swatch") {
 			this.paletteController.updateSwatch(
-				(payload as EventMap["change-swatch"]).cssProps
+				(payload as EventMap["change-swatch"])
 			);
 		}
 	}
