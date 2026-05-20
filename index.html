@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>age-of-palettes</title>
+		<title>age of palettes</title>
 		<link rel="stylesheet" href="./src/styles.css" />
 	</head>
 	<body>
@@ -18,7 +18,7 @@
 				<li id="Player 6"><button>P6</button></li>
 				<li id="Player 7"><button>P7</button></li>
 				<li id="Player 8"><button>P8</button></li>
-				<li id="Gaia"><button>Gaia</button></li>
+				<li id="Gaia"><button>G</button></li>
 			</ul>
 			<div id="preview-all">
 				<img name="Player 1" src="/preview.png" width="1780" height="780" alt="preview p1" />
@@ -33,40 +33,38 @@
 			</div>
 			<div id="editor">
 				<h2></h2>
+				<div class="inputs">
+				<input type="color" name="picker" id="picker" />
 				<div class="row">
-					<input type="color" name="picker" id="picker" />
-				</div>
-				<div class="row">
-					<label for="hex">hex</label>
+					<label for="hex">HEX</label>
 					<input type="text" name="hex" id="hex" autocomplete="off" />
 				</div>
 				<div class="row">
-					<span>rgb</span>
+					<span>RGB</span>
 					<input type="number" name="rgb-r" id="rgb-r" min="0" max="255" />
 					<input type="number" name="rgb-g" id="rgb-g" min="0" max="255" />
 					<input type="number" name="rgb-b" id="rgb-b" min="0" max="255" />
 				</div>
 				<div class="row">
-					<span>hsv</span>
+					<span>HSV</span>
 					<input type="number" name="hsv-h" id="hsv-h" min="0" max="360" />
 					<input type="number" name="hsv-s" id="hsv-s" min="0" max="100" />
 					<input type="number" name="hsv-v" id="hsv-v" min="0" max="100" />
 				</div>
 				<div class="row">
-					<span>hsv</span>
+					<span>HSL</span>
 					<input type="number" name="hsl-h" id="hsl-h" min="0" max="360" />
 					<input type="number" name="hsl-s" id="hsl-s" min="0" max="100" />
 					<input type="number" name="hsl-l" id="hsl-l" min="0" max="100" />
 				</div>
-				<div class="img-container">
-					<img
-						id="preview"
-						src="/preview.png"
-						width="1780"
-						height="780"
-						alt="preview"
-					/>
 				</div>
+				<img
+					id="preview"
+					src="/preview.png"
+					width="1780"
+					height="780"
+					alt="preview"
+				/>
 			</div>
 		</div>
 		<script type="module" src="/src/main.ts"></script>

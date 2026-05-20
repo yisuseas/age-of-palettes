@@ -1,29 +1,213 @@
-.hidden {
+:root {
+	--dark-1: #111111;
+	--dark-2: #222222;
+	--dark-3: #333333;
+	--mid-1: #555555;
+	--mid-2: #777777;
+	--light-1: #dddddd;
+	--light-2: #ffffff;
+
+	--size-0: 1px;
+	--size-1: 0.1875rem;
+	--size-2: 0.375rem;
+	--size-3: 0.75rem;
+	--size-4: 1.25rem;
+	--size-5: 1.5rem;
+	--size-6: 1.75rem;
+	--size-7: 2rem;
+
+	--editor-w: 22.5rem;
+}
+
+body {
+	background-color: var(--dark-2);
+	color: var(--light-1);
+	font-size: 16px;
+	font-family: serif;
+	overflow: hidden;
+}
+
+#app {
+	width: 100%;
+	height: 100%;
+	max-height: 100vh;
+	overflow: hidden;
+	display: grid;
+	grid-template-rows: 1fr;
+	grid-template-columns: min-content 1fr;
+}
+
+#preview-all,
+#editor {
+	grid-row: 1;
+	grid-column: 2;
+}
+
+/* Sidebar */
+
+#player-list {
+	background-color: var(--dark-1);
+	display: flex;
+	flex-direction: column;
+	padding-top: var(--size-2);
+}
+
+li {
+	display: block;
+	padding: var(--size-2) var(--size-3);
+}
+
+li.selected {
+	background-color: var(--dark-3);
+}
+
+button {
+	width: var(--size-6);
+	height: var(--size-6);
+	background-color: var(--bg);
+	color: var(--fg);
+	font-family: inherit;
+}
+
+/* Preview All */
+
+#preview-all {
+	height: 100vh;
+	display: grid;
+	grid-template-rows: repeat(3, 1fr);
+	grid-template-columns: repeat(3, 1fr);
+	padding: var(--size-6);
+	gap: var(--size-6);
+}
+
+#preview-all img {
+	width: 100%;
+	/* TODO: Fix this hardcoded height */
+	height: calc(calc(100vh - 4 * var(--size-6)) / 3);
+	aspect-ratio: 780 / 1780;
+	object-fit: cover;
+	object-position: bottom;
+}
+
+/* Editor */
+
+#editor {
+	background-color: var(--dark-3);
+	height: 100%;
+	max-height: 100vh;
+	width: 100%;
+	display: grid;
+	grid-template-rows: repeat(2, min-content) 1fr;
+	padding: var(--size-4);
+	gap: var(--size-4);
+	place-items: center;
+}
+
+#editor.hidden {
 	display: none;
 }
 
-#player-list {
-	li.selected {
-		background-color: gray;
-	}
+h2 {
+	text-transform: uppercase;
+	text-align: center;
+	line-height: 1;
+	font-size: inherit;
+	font-weight: bold;
+}
 
-	button {
-		background-color: var(--bg);
-		color: var(--fg);
-	}
+.inputs {
+	width: 100%;
+	max-width: var(--editor-w);
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-2);
+}
+
+#picker {
+	width: 100%;
+	padding: 0;
+}
+
+.row {
+	display: grid;
+	gap: var(--size-2);
+	grid-template-columns: var(--size-7) repeat(3, 1fr);
+	align-items: center;
+	line-height: 1;
+}
+
+input {
+	border-color: var(--light-1);
+	border-radius: 0;
+	border-width: var(--size-0);
+	background-color: var(--dark-2);
+	color: var(--light-1);
+	text-align: right;
+	font-family: monospace;
+	font-size: inherit;
+	line-height: 1;
+	padding: var(--size-1) var(--size-2);
+	height: var(--size-5);
+}
+
+*::selection {
+	background-color: var(--mid-1);
+}
+
+#hex {
+	grid-column: span 3 / span 3;
+}
+
+#preview {
+	width: 100%;
+	height: 100%;
+	/* TODO: Fix this hardcoded height */
+	max-height: calc(
+		100vh - 1rem - 4 * var(--size-2) - 4 * var(--size-4) - 5 * var(--size-5)
+	);
+	object-fit: cover;
+}
+
+/* Reset */
+
+* {
+	box-sizing: border-box;
+}
+
+body,
+h2,
+ul {
+	margin: 0;
+	padding: 0;
 }
 
 button,
 input[type="color"] {
+	border-width: var(--size-0);
+	border-color: var(--light-1);
+	border-radius: 0;
 	cursor: pointer;
 }
 
-.img-container {
-	position: relative;
+button:hover,
+input[type="color"]:hover {
+	border-color: var(--mid-2);
+}
 
-	img {
-		position: absolute;
-		top: 0;
-		left: 0;
-	}
+button:active {
+	transform: scale(0.95);
+}
+input[type="color"]:active {
+	transform: scale(0.98);
+}
+
+button:focus-visible,
+input:focus-visible {
+	outline: var(--size-0) solid var(--light-2);
+	outline-offset: var(--size-0);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	margin: 0;
 }
