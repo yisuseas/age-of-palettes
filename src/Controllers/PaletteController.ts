@@ -31,13 +31,17 @@ export class PaletteController {
 	}
 
 	private bindEvents() {
-		ALL_PLAYER_NAMES.forEach((name) => {
-			const li = document.getElementById(name)!;
-			const btn = li.querySelector("button")!;
-			btn.addEventListener("click", () => {
+		const previewAll = document.getElementById("preview-all")!;
+		ALL_PLAYER_NAMES.forEach((name, idx) => {
+			const handleClick = () => {
 				this.toggleSelected(name);
 				this.render();
-			});
+			};
+			const li = document.getElementById(name)!;
+			const btn = li.querySelector("button")!;
+			btn.addEventListener("click", handleClick);
+			const img = previewAll.children[idx];
+			img.addEventListener("click", handleClick);
 		});
 	}
 

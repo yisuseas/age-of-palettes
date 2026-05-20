@@ -87,6 +87,7 @@ button {
 	aspect-ratio: 780 / 1780;
 	object-fit: cover;
 	object-position: bottom;
+	cursor: pointer;
 }
 
 /* Editor */
