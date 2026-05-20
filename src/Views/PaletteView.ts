@@ -1,17 +1,18 @@
 import type { PlayerName, ViewProps } from "../types";
 
-
 export class PaletteView {
 	playerList: HTMLUListElement;
 	previewAll: HTMLDivElement;
 
 	constructor() {
 		this.playerList = document.querySelector("ul#player-list")!;
-		this.previewAll = document.querySelector('div#preview-all')!;
+		this.previewAll = document.querySelector("div#preview-all")!;
 	}
 
 	private getImg(name: PlayerName) {
-		return this.previewAll.querySelector(`img[name="${name}"]`) as HTMLImageElement;
+		return this.previewAll.querySelector(
+			`img[name="${name}"]`
+		) as HTMLImageElement;
 	}
 
 	render(name: PlayerName, props: ViewProps, isSelected: boolean) {
@@ -22,9 +23,8 @@ export class PaletteView {
 		} else {
 			li.classList.remove("selected");
 		}
-		this.getImg(name).style.backgroundColor = props.bg
+		this.getImg(name).style.backgroundColor = props.bg;
 	}
-
 
 	renderAll(entries: [PlayerName, ViewProps][], selected: PlayerName | null) {
 		entries.forEach(([name, props]) => {

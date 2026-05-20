@@ -49,7 +49,7 @@ export class PaletteModel {
 	getAll(): [PlayerName, ViewProps][] {
 		return ALL_PLAYER_NAMES.map((name) => [
 			name,
-			this.playerData[name].props()
+			this.playerData[name].props(),
 		]);
 	}
 }

@@ -39,7 +39,7 @@ export class Mediator {
 			this.playerController.set(payload as EventMap["change-player"]);
 		} else if (eventName === "change-swatch") {
 			this.paletteController.updateSwatch(
-				(payload as EventMap["change-swatch"])
+				payload as EventMap["change-swatch"]
 			);
 		}
 	}

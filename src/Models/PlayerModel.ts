@@ -42,7 +42,7 @@ export class PlayerModel {
 	props(): ViewProps {
 		return {
 			bg: this.background(),
-			fg: this.foreground()
-		}
+			fg: this.foreground(),
+		};
 	}
 }
