@@ -16,9 +16,9 @@ export class PlayerModel {
 	static fromDefault(name: PlayerName) {
 		const original = defaultColors.TeamColors[name].FloatRGBA;
 		const color = Color.rgb(
-			Math.round(original.r * 255),
-			Math.round(original.g * 255),
-			Math.round(original.b * 255)
+			original.r * 255,
+			original.g * 255,
+			original.b * 255
 		);
 		return new PlayerModel(color.hex().replace("#", ""));
 	}

@@ -10,15 +10,15 @@
 	<body>
 		<div id="app">
 			<ul id="player-list">
-				<li id="Player 1"><button>P1</button></li>
-				<li id="Player 2"><button>P2</button></li>
-				<li id="Player 3"><button>P3</button></li>
-				<li id="Player 4"><button>P4</button></li>
-				<li id="Player 5"><button>P5</button></li>
-				<li id="Player 6"><button>P6</button></li>
-				<li id="Player 7"><button>P7</button></li>
-				<li id="Player 8"><button>P8</button></li>
-				<li id="Gaia"><button>G</button></li>
+				<li id="Player 1"><button class="btn">P1</button></li>
+				<li id="Player 2"><button class="btn">P2</button></li>
+				<li id="Player 3"><button class="btn">P3</button></li>
+				<li id="Player 4"><button class="btn">P4</button></li>
+				<li id="Player 5"><button class="btn">P5</button></li>
+				<li id="Player 6"><button class="btn">P6</button></li>
+				<li id="Player 7"><button class="btn">P7</button></li>
+				<li id="Player 8"><button class="btn">P8</button></li>
+				<li id="Gaia"><button class="btn">G</button></li>
 			</ul>
 			<div id="preview-all">
 				<img
@@ -88,7 +88,7 @@
 			<div id="editor">
 				<h2></h2>
 				<div class="inputs">
-					<input type="color" name="picker" id="picker" />
+					<input class="btn" type="color" name="picker" id="picker" />
 					<div class="row">
 						<label for="hex">HEX</label>
 						<input type="text" name="hex" id="hex" autocomplete="off" />
@@ -173,6 +173,18 @@
 					height="780"
 					alt="preview"
 				/>
+			</div>
+			<div class="icon-buttons">
+				<a
+					id="download"
+					class="btn"
+					download="spritecolors.json"
+					type="text/plain"
+				>
+					<svg role="presentation" aria-hidden="true">
+						<use href="/icons.svg#download-icon"></use>
+					</svg>
+				</a>
 			</div>
 		</div>
 		<script type="module" src="/src/main.ts"></script>

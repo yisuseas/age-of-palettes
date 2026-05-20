@@ -28,6 +28,7 @@ export class PaletteController {
 
 	render() {
 		this.view.renderAll(this.model.getAll(), this.selectedPlayer);
+		this.view.renderDownload(this.model.getFileData());
 	}
 
 	private bindEvents() {
@@ -57,5 +58,6 @@ export class PaletteController {
 	updateSwatch(props: ViewProps) {
 		this.model.updateURL();
 		this.view.render(this.selectedPlayer!, props, true);
+		this.view.renderDownload(this.model.getFileData());
 	}
 }

@@ -169,6 +169,25 @@ input {
 	object-fit: cover;
 }
 
+/* Icon buttons */
+
+.icon-buttons {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	display: flex;
+	flex-direction: column;
+	padding: var(--size-3);
+	gap: var(--size-3);
+}
+
+.icon-buttons .btn {
+	width: var(--size-6);
+	height: var(--size-6);
+	display: inline-grid;
+	place-items: center;
+}
+
 /* Reset */
 
 * {
@@ -182,27 +201,26 @@ ul {
 	padding: 0;
 }
 
-button,
-input[type="color"] {
+.btn {
 	border-width: var(--size-0);
 	border-color: var(--light-1);
 	border-radius: 0;
+	border-style: solid;
 	cursor: pointer;
 }
 
-button:hover,
-input[type="color"]:hover {
+.btn:hover {
 	border-color: var(--mid-2);
 }
 
-button:active {
+.btn:active {
 	transform: scale(0.95);
 }
 input[type="color"]:active {
 	transform: scale(0.98);
 }
 
-button:focus-visible,
+.btn:focus-visible,
 input:focus-visible {
 	outline: var(--size-0) solid var(--light-2);
 	outline-offset: var(--size-0);
@@ -211,4 +229,15 @@ input:focus-visible {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
 	margin: 0;
+}
+
+svg {
+	fill: currentColor;
+	height: 1rem;
+	width: 1rem;
+}
+
+a {
+	color: inherit;
+	text-decoration: inherit;
 }

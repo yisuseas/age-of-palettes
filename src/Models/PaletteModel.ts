@@ -1,4 +1,10 @@
-import type { PlayerName, ViewProps } from "../types";
+import type {
+	ColorJSON,
+	PlayerColors,
+	PlayerName,
+	SpriteColors,
+	ViewProps,
+} from "../types";
 import { PlayerModel } from "./PlayerModel";
 import { ALL_PLAYER_NAMES } from "../constant";
 
@@ -51,5 +57,27 @@ export class PaletteModel {
 			name,
 			this.playerData[name].props(),
 		]);
+	}
+
+	getFileData() {
+		const playerColors = Object.fromEntries(
+			ALL_PLAYER_NAMES.map((name) => {
+				const [r, g, b] = this.playerData[name].unit
+					.rgb()
+					.array()
+					.map((n) => n / 255);
+				const colorJson: ColorJSON = {
+					FloatRGBA: { r, g, b, a: 1.0 },
+				};
+				return [name, colorJson];
+			})
+		) as PlayerColors;
+		const spriteColors: SpriteColors = {
+			TeamColors: playerColors,
+			OutlineColors: playerColors,
+		};
+		const jsonStr = JSON.stringify(spriteColors);
+		const file = new Blob([jsonStr], { type: "text/plain" });
+		return URL.createObjectURL(file);
 	}
 }

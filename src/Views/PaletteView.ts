@@ -3,10 +3,12 @@ import type { PlayerName, ViewProps } from "../types";
 export class PaletteView {
 	playerList: HTMLUListElement;
 	previewAll: HTMLDivElement;
+	download: HTMLAnchorElement;
 
 	constructor() {
 		this.playerList = document.querySelector("ul#player-list")!;
 		this.previewAll = document.querySelector("div#preview-all")!;
+		this.download = document.querySelector("a#download")!;
 	}
 
 	private getImg(name: PlayerName) {
@@ -30,5 +32,9 @@ export class PaletteView {
 		entries.forEach(([name, props]) => {
 			this.render(name, props, selected === name);
 		});
+	}
+
+	renderDownload(href: string) {
+		this.download.href = href;
 	}
 }

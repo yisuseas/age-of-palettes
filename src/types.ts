@@ -1,6 +1,6 @@
 export type PlayerName = "Gaia" | `Player ${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8}`;
 
-interface ColorJSON {
+export interface ColorJSON {
 	FloatRGBA: {
 		r: number;
 		g: number;
@@ -9,7 +9,7 @@ interface ColorJSON {
 	};
 }
 
-type PlayerColors = Record<PlayerName, ColorJSON>;
+export type PlayerColors = Record<PlayerName, ColorJSON>;
 
 export interface SpriteColors {
 	TeamColors: PlayerColors;
