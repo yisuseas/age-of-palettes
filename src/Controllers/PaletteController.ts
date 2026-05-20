@@ -4,6 +4,8 @@ import type { PlayerName, ViewProps } from "../types";
 import type { PaletteView } from "../Views/PaletteView";
 import type { Mediator } from "../Mediator";
 
+const MOD_KEY = "Space";
+
 export class PaletteController {
 	model: PaletteModel;
 	view: PaletteView;
@@ -14,7 +16,7 @@ export class PaletteController {
 		this.model = model;
 		this.view = view;
 		this.mediator = {} as unknown as Mediator;
-		this.selectedPlayer = "Player 1";
+		this.selectedPlayer = null;
 	}
 
 	setMediator(mediator: Mediator) {
@@ -23,12 +25,12 @@ export class PaletteController {
 
 	run() {
 		this.render();
+		this.view.renderDownload(this.model.getFileData());
 		this.bindEvents();
 	}
 
 	render() {
 		this.view.renderAll(this.model.getAll(), this.selectedPlayer);
-		this.view.renderDownload(this.model.getFileData());
 	}
 
 	private bindEvents() {
@@ -36,13 +38,32 @@ export class PaletteController {
 		ALL_PLAYER_NAMES.forEach((name, idx) => {
 			const handleClick = () => {
 				this.toggleSelected(name);
-				this.render();
 			};
 			const li = document.getElementById(name)!;
 			const btn = li.querySelector("button")!;
 			btn.addEventListener("click", handleClick);
 			const img = previewAll.children[idx];
 			img.addEventListener("click", handleClick);
+		});
+
+		const validPlayerCode = /^(Digit|Numpad)[1-9]$/;
+		const keyPrefix = /Digit|Numpad/;
+
+		let modKeyPressed = false;
+		window.addEventListener("keydown", (event) => {
+			if (event.code === MOD_KEY) {
+				modKeyPressed = true;
+			} else if (this.selectedPlayer && event.code === "Escape") {
+				this.toggleSelected(this.selectedPlayer);
+			} else if (modKeyPressed && validPlayerCode.test(event.code)) {
+				const idx = parseInt(event.code.replace(keyPrefix, "")) - 1;
+				this.toggleSelected(ALL_PLAYER_NAMES[idx]);
+			}
+		});
+		window.addEventListener("keyup", (event) => {
+			if (event.code === MOD_KEY) {
+				modKeyPressed = false;
+			}
 		});
 	}
 
@@ -53,6 +74,7 @@ export class PaletteController {
 			? { name, model: this.model.playerData[name] }
 			: null;
 		this.mediator.dispatch("change-player", payload);
+		this.render();
 	}
 
 	updateSwatch(props: ViewProps) {

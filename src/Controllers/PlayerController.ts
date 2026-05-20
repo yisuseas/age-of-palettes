@@ -43,7 +43,6 @@ export class PlayerController {
 	}
 
 	run() {
-		this.render("Player 1");
 		this.bindEvents();
 	}
 
