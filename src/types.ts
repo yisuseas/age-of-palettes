@@ -1,3 +1,5 @@
+import type { PlayerModel } from "./Models/PlayerModel";
+
 export type PlayerName = "Gaia" | `Player ${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8}`;
 
 export interface ColorJSON {
@@ -22,3 +24,14 @@ export interface ViewProps {
 	bg: string;
 	fg: string;
 }
+
+export type EventMap = {
+	"change-player": {
+		name: PlayerName;
+		model: PlayerModel;
+	} | null;
+
+	"change-swatch": ViewProps;
+};
+
+export type EventName = keyof EventMap;

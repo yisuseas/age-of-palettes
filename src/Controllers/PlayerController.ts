@@ -1,8 +1,8 @@
 import Color, { type ColorInstance } from "color";
-import { PlayerModel } from "../Models/PlayerModel";
 import type { PlayerView } from "../Views/PlayerView";
-import type { ColorEditor, PlayerName } from "../types";
-import type { EventMap, Mediator } from "../Mediator";
+import type { ColorEditor, EventMap, PlayerName } from "../types";
+import type { App } from "../App";
+import { PlayerModel } from "../Models/PlayerModel";
 
 const VALID_HEX = /^\#[\da-f]{6}$/i;
 
@@ -21,16 +21,12 @@ type Channel = keyof typeof MAX_CHANNEL_VALUE;
 export class PlayerController {
 	model: PlayerModel;
 	view: PlayerView;
-	mediator: Mediator;
+	app: App;
 
-	constructor(model: PlayerModel, view: PlayerView) {
+	constructor(model: PlayerModel, view: PlayerView, app: App) {
 		this.model = model;
 		this.view = view;
-		this.mediator = {} as unknown as Mediator;
-	}
-
-	setMediator(mediator: Mediator) {
-		this.mediator = mediator;
+		this.app = app;
 	}
 
 	set(payload: EventMap["change-player"]) {
@@ -54,7 +50,7 @@ export class PlayerController {
 		const updateColor = (newColor: ColorInstance, skip?: ColorEditor) => {
 			this.model.set(newColor);
 			this.view.updateEditor(newColor, skip);
-			this.mediator.dispatch("change-swatch", this.model.props());
+			this.app.dispatch("change-swatch", this.model.props());
 		};
 
 		this.view.picker.addEventListener("input", () => {

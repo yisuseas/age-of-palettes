@@ -1,33 +1,32 @@
-import type { PlayerModel } from "./Models/PlayerModel";
-import type { PlayerName, ViewProps } from "./types";
-import type { PaletteController } from "./Controllers/PaletteController";
-import type { PlayerController } from "./Controllers/PlayerController";
-
-export type EventMap = {
-	"change-player": {
-		name: PlayerName;
-		model: PlayerModel;
-	} | null;
-
-	"change-swatch": ViewProps;
-};
-
-type EventName = keyof EventMap;
+import type { EventMap, EventName } from "./types";
+import { PaletteController } from "./Controllers/PaletteController";
+import { PlayerController } from "./Controllers/PlayerController";
+import { PaletteModel } from "./Models/PaletteModel";
+import { PlayerView } from "./Views/PlayerView";
+import { PaletteView } from "./Views/PaletteView";
 
 const TUTORIAL_STORAGE_KEY = "tutorial-seen";
 
-export class Mediator {
+export class App {
 	private paletteController: PaletteController;
 	private playerController: PlayerController;
 
-	constructor(
-		paletteController: PaletteController,
-		playerController: PlayerController
-	) {
-		this.paletteController = paletteController;
-		this.paletteController.setMediator(this);
-		this.playerController = playerController;
-		this.playerController.setMediator(this);
+	constructor() {
+		const paletteModel = new PaletteModel();
+
+		const playerView = new PlayerView();
+		const paletteView = new PaletteView();
+
+		this.playerController = new PlayerController(
+			paletteModel.playerData["Player 1"],
+			playerView,
+			this
+		);
+		this.paletteController = new PaletteController(
+			paletteModel,
+			paletteView,
+			this
+		);
 	}
 
 	run() {

@@ -2,25 +2,21 @@ import { ALL_PLAYER_NAMES } from "../constant";
 import type { PaletteModel } from "../Models/PaletteModel";
 import type { PlayerName, ViewProps } from "../types";
 import type { PaletteView } from "../Views/PaletteView";
-import type { Mediator } from "../Mediator";
+import type { App } from "../App";
 
 const MOD_KEY = "Space";
 
 export class PaletteController {
 	model: PaletteModel;
 	view: PaletteView;
-	mediator: Mediator;
+	app: App;
 	selectedPlayer: PlayerName | null;
 
-	constructor(model: PaletteModel, view: PaletteView) {
+	constructor(model: PaletteModel, view: PaletteView, app: App) {
 		this.model = model;
 		this.view = view;
-		this.mediator = {} as unknown as Mediator;
+		this.app = app;
 		this.selectedPlayer = null;
-	}
-
-	setMediator(mediator: Mediator) {
-		this.mediator = mediator;
 	}
 
 	run() {
@@ -73,7 +69,7 @@ export class PaletteController {
 		const payload = name
 			? { name, model: this.model.playerData[name] }
 			: null;
-		this.mediator.dispatch("change-player", payload);
+		this.app.dispatch("change-player", payload);
 		this.render();
 	}
 
