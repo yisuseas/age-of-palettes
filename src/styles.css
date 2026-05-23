@@ -181,11 +181,76 @@ input {
 	gap: var(--size-3);
 }
 
-.icon-buttons .btn {
+.icon-buttons .btn,
+.fake.btn {
 	width: var(--size-6);
 	height: var(--size-6);
 	display: inline-grid;
 	place-items: center;
+}
+
+/* Tutorial */
+
+#tutorial {
+	background-color: var(--dark-3);
+	color: var(--light-1);
+	border-color: currentColor;
+	border-width: var(--size-0);
+	padding: var(--size-4);
+	text-align: center;
+}
+
+#tutorial::backdrop {
+	background-color: var(--dark-1);
+	opacity: 0.5;
+}
+
+.text {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-3);
+}
+
+.text p {
+	line-height: var(--size-5);
+}
+
+.text .mono {
+	font-family: monospace;
+	color: var(--light-2);
+	background-color: var(--dark-2);
+}
+
+.key {
+	display: inline-grid;
+	place-items: center;
+	padding: 0 var(--size-2);
+	width: min-content;
+	min-width: var(--size-5);
+	height: var(--size-5);
+	line-height: 1;
+	background-color: var(--dark-2);
+	border-width: var(--size-0);
+	border-style: solid;
+	border-color: var(--mid-2);
+	border-radius: var(--size-1);
+}
+
+.fake.btn {
+	background-color: var(--dark-1);
+	cursor: initial;
+}
+.fake.btn:hover {
+	border-color: inherit;
+}
+.fake.btn:active {
+	transform: none;
+}
+
+#close-tutorial.btn {
+	width: min-content;
+	padding: var(--size-1) var(--size-4);
+	margin-top: var(--size-4);
 }
 
 /* Reset */
@@ -196,7 +261,8 @@ input {
 
 body,
 h2,
-ul {
+ul,
+p {
 	margin: 0;
 	padding: 0;
 }

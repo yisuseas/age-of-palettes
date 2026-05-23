@@ -14,6 +14,8 @@ export type EventMap = {
 
 type EventName = keyof EventMap;
 
+const TUTORIAL_STORAGE_KEY = "tutorial-seen";
+
 export class Mediator {
 	private paletteController: PaletteController;
 	private playerController: PlayerController;
@@ -31,6 +33,7 @@ export class Mediator {
 	run() {
 		this.paletteController.run();
 		this.playerController.run();
+		this.setupTutorial();
 	}
 
 	public dispatch<EN extends EventName>(eventName: EN, payload: EventMap[EN]) {
@@ -42,5 +45,31 @@ export class Mediator {
 				payload as EventMap["change-swatch"]
 			);
 		}
+	}
+
+	private setupTutorial() {
+		const dialog = document.getElementById("tutorial") as HTMLDialogElement;
+
+		window.addEventListener("keydown", (event) => {
+			if (event.code === "F1") {
+				dialog.showModal();
+			}
+		});
+
+		const openBtn = document.getElementById(
+			"open-tutorial"
+		) as HTMLButtonElement;
+		const closeBtn = document.getElementById(
+			"close-tutorial"
+		) as HTMLButtonElement;
+		openBtn.addEventListener("click", () => dialog.showModal());
+		closeBtn.addEventListener("click", () => dialog.close());
+
+		if (!window.localStorage.getItem(TUTORIAL_STORAGE_KEY)) {
+			dialog.showModal();
+		}
+		dialog.addEventListener("close", () => {
+			window.localStorage.setItem(TUTORIAL_STORAGE_KEY, "true");
+		});
 	}
 }
