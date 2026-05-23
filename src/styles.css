@@ -212,7 +212,8 @@ input {
 }
 
 .text p {
-	line-height: var(--size-5);
+	height: var(--size-6);
+	line-height: var(--size-6);
 }
 
 .text .mono {

@@ -4,7 +4,22 @@ import type { PlayerName, ViewProps } from "../types";
 import type { PaletteView } from "../Views/PaletteView";
 import type { App } from "../App";
 
-const MOD_KEY = "Space";
+class ModKey {
+	isPressed = false;
+
+	constructor(isModKey: (event: KeyboardEvent) => boolean) {
+		window.addEventListener("keydown", (event) => {
+			if (isModKey(event)) {
+				this.isPressed = true;
+			}
+		});
+		window.addEventListener("keyup", (event) => {
+			if (isModKey(event)) {
+				this.isPressed = false;
+			}
+		});
+	}
+}
 
 export class PaletteController {
 	model: PaletteModel;
@@ -44,21 +59,14 @@ export class PaletteController {
 
 		const validPlayerCode = /^(Digit|Numpad)[1-9]$/;
 		const keyPrefix = /Digit|Numpad/;
+		const modKey = new ModKey((event) => event.code.startsWith("Shift"));
 
-		let modKeyPressed = false;
 		window.addEventListener("keydown", (event) => {
-			if (event.code === MOD_KEY) {
-				modKeyPressed = true;
-			} else if (this.selectedPlayer && event.code === "Escape") {
+			if (this.selectedPlayer && event.code === "Escape") {
 				this.toggleSelected(this.selectedPlayer);
-			} else if (modKeyPressed && validPlayerCode.test(event.code)) {
+			} else if (modKey.isPressed && validPlayerCode.test(event.code)) {
 				const idx = parseInt(event.code.replace(keyPrefix, "")) - 1;
 				this.toggleSelected(ALL_PLAYER_NAMES[idx]);
-			}
-		});
-		window.addEventListener("keyup", (event) => {
-			if (event.code === MOD_KEY) {
-				modKeyPressed = false;
 			}
 		});
 	}
