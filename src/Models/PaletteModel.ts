@@ -1,5 +1,4 @@
 import type {
-	ColorJSON,
 	PlayerColors,
 	PlayerName,
 	SpriteColors,
@@ -20,26 +19,18 @@ export class PaletteModel {
 	constructor() {
 		const search = new URLSearchParams(window.location.search);
 		const urlPalette = search.get(SEARCH_KEY);
-		let generatePlayerColors: (
-			name: PlayerName,
-			idx: number
-		) => [PlayerName, PlayerModel];
+		let genPlayerModel: (name: PlayerName, idx: number) => PlayerModel;
 
 		if (urlPalette && VALID_PATTERN.test(urlPalette)) {
 			const hexColors = urlPalette.split(PLAYER_SEPARATOR);
-			generatePlayerColors = (name, idx) => {
-				const player = new PlayerModel(hexColors[idx]);
-				return [name, player];
-			};
+			genPlayerModel = (_name, idx) =>
+				PlayerModel.fromString(hexColors[idx]);
 		} else {
-			generatePlayerColors = (name, _) => {
-				const player = PlayerModel.fromDefault(name);
-				return [name, player];
-			};
+			genPlayerModel = (name, _idx) => PlayerModel.fromDefault(name);
 		}
 
 		this.playerData = Object.fromEntries(
-			ALL_PLAYER_NAMES.map(generatePlayerColors)
+			ALL_PLAYER_NAMES.map((name, idx) => [name, genPlayerModel(name, idx)])
 		) as Record<PlayerName, PlayerModel>;
 	}
 
@@ -61,16 +52,10 @@ export class PaletteModel {
 
 	getFileData() {
 		const playerColors = Object.fromEntries(
-			ALL_PLAYER_NAMES.map((name) => {
-				const [r, g, b] = this.playerData[name].unit
-					.rgb()
-					.array()
-					.map((n) => n / 255);
-				const colorJson: ColorJSON = {
-					FloatRGBA: { r, g, b, a: 1.0 },
-				};
-				return [name, colorJson];
-			})
+			ALL_PLAYER_NAMES.map((name) => [
+				name,
+				this.playerData[name].playerColors(),
+			])
 		) as PlayerColors;
 		const spriteColors: SpriteColors = {
 			TeamColors: playerColors,

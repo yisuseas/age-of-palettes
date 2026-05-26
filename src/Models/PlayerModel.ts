@@ -1,6 +1,6 @@
 import type { ColorInstance } from "color";
 import Color from "color";
-import type { PlayerName, ViewProps } from "../types";
+import type { ColorJSON, PlayerName, ViewProps } from "../types";
 import defaultColors from "../spritecolors.json";
 
 const WHITE = new Color("white").toString();
@@ -9,8 +9,13 @@ const BLACK = new Color("black").toString();
 export class PlayerModel {
 	unit: ColorInstance;
 
-	constructor(hexStr: string) {
-		this.unit = new Color(`#${hexStr}`);
+	private constructor(color: ColorInstance) {
+		this.unit = color;
+	}
+
+	static fromString(str: string) {
+		const color = new Color(`#${str}`);
+		return new PlayerModel(color);
 	}
 
 	static fromDefault(name: PlayerName) {
@@ -20,7 +25,17 @@ export class PlayerModel {
 			original.g * 255,
 			original.b * 255
 		);
-		return new PlayerModel(color.hex().replace("#", ""));
+		return new PlayerModel(color);
+	}
+
+	playerColors(): ColorJSON {
+		const [r, g, b] = this.unit
+			.rgb()
+			.array()
+			.map((n) => n / 255);
+		return {
+			FloatRGBA: { r, g, b, a: 1.0 },
+		};
 	}
 
 	background() {
