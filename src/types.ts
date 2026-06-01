@@ -35,3 +35,37 @@ export type EventMap = {
 };
 
 export type EventName = keyof EventMap;
+
+export type PlayerColorName =
+	| "Blue"
+	| "Red"
+	| "Green"
+	| "Yellow"
+	| "Aqua"
+	| "Purple"
+	| "Grey"
+	| "Orange"
+	| "White";
+
+export type PlayerUIElement =
+	| "Text"
+	| "TextOutline"
+	| "Icons"
+	| "HealthBar"
+	| "TimelineDark"
+	| "TimelineLight"
+	| "MiniMap"
+	| "TechtreePreviewCiv";
+
+export type UIRGBA = [number, number, number, number];
+
+export type PlayerUIColors = Record<PlayerUIElement, UIRGBA>;
+
+export type ColorTables = Record<PlayerColorName, PlayerUIColors>;
+
+export interface UIColors {
+	PresetColors: {
+		ScoreInfoText: [213, 213, 213, 255];
+	};
+	ColorTables: ColorTables;
+}

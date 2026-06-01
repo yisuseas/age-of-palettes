@@ -1,11 +1,14 @@
 import type {
+	ColorTables,
 	PlayerColors,
 	PlayerName,
 	SpriteColors,
+	UIColors,
 	ViewProps,
 } from "../types";
+import JSZip from "jszip";
 import { PlayerModel } from "./PlayerModel";
-import { ALL_PLAYER_NAMES } from "../constant";
+import { ALL_PLAYER_NAMES, PLAYER_COLOR_NAMES } from "../constant";
 
 const SEARCH_KEY = "palette";
 
@@ -50,7 +53,7 @@ export class PaletteModel {
 		]);
 	}
 
-	getFileData() {
+	private getFileDataSprite() {
 		const playerColors = Object.fromEntries(
 			ALL_PLAYER_NAMES.map((name) => [
 				name,
@@ -61,8 +64,44 @@ export class PaletteModel {
 			TeamColors: playerColors,
 			OutlineColors: playerColors,
 		};
-		const jsonStr = JSON.stringify(spriteColors);
-		const file = new Blob([jsonStr], { type: "text/plain" });
-		return URL.createObjectURL(file);
+		return JSON.stringify(spriteColors);
+	}
+
+	private getFileDataUI() {
+		const colorTables = Object.fromEntries(
+			ALL_PLAYER_NAMES.map((name) => [
+				PLAYER_COLOR_NAMES[name],
+				this.playerData[name].uiColors(),
+			])
+		) as ColorTables;
+		const uiColors: UIColors = {
+			PresetColors: {
+				ScoreInfoText: [213, 213, 213, 255],
+			},
+			ColorTables: colorTables,
+		};
+		return JSON.stringify(uiColors);
+	}
+
+	async getModData(title: string) {
+		const zip = new JSZip();
+		const mainFolder = zip.folder(title);
+		if (!mainFolder) {
+			throw new Error("Failed to make main folder");
+		}
+
+		const info = JSON.stringify({
+			Title: title,
+			Description: "Custom palette for player sprites & ui elements",
+		});
+		const sprite = this.getFileDataSprite();
+		const ui = this.getFileDataUI();
+
+		mainFolder.file("info.json", info);
+		mainFolder.file("widgetui/UIColors.json", ui);
+		mainFolder.file("resources/_common/palettes/spritecolors.json", sprite);
+
+		const data = await zip.generateAsync({ type: "blob" });
+		return URL.createObjectURL(data);
 	}
 }

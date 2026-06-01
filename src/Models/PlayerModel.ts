@@ -1,10 +1,26 @@
 import type { ColorInstance } from "color";
 import Color from "color";
-import type { ColorJSON, PlayerName, ViewProps } from "../types";
+import type {
+	ColorJSON,
+	PlayerName,
+	PlayerUIColors,
+	UIRGBA,
+	ViewProps,
+} from "../types";
 import defaultColors from "../spritecolors.json";
 
 const WHITE = new Color("white").toString();
 const BLACK = new Color("black").toString();
+
+const LIGHT_DARK_RATIO = 0.15;
+
+function uiColor(color: ColorInstance, alpha = 255): UIRGBA {
+	const [r, g, b] = color
+		.rgb()
+		.array()
+		.map((n) => Math.round(n));
+	return [r, g, b, alpha];
+}
 
 export class PlayerModel {
 	unit: ColorInstance;
@@ -35,6 +51,25 @@ export class PlayerModel {
 			.map((n) => n / 255);
 		return {
 			FloatRGBA: { r, g, b, a: 1.0 },
+		};
+	}
+
+	uiColors(): PlayerUIColors {
+		const base = uiColor(this.unit);
+		const darker = uiColor(new Color(this.unit).darken(LIGHT_DARK_RATIO));
+		const lighter = uiColor(new Color(this.unit).lighten(LIGHT_DARK_RATIO));
+		const textOutline: UIRGBA = this.unit.isLight()
+			? [0, 0, 0, 255]
+			: [255, 255, 255, 128];
+		return {
+			Text: base,
+			TextOutline: textOutline,
+			Icons: base,
+			HealthBar: base,
+			TimelineDark: darker,
+			TimelineLight: lighter,
+			MiniMap: base,
+			TechtreePreviewCiv: base,
 		};
 	}
 

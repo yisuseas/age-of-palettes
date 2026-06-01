@@ -209,10 +209,10 @@ input {
 	display: flex;
 	flex-direction: column;
 	gap: var(--size-3);
+	text-wrap: balance;
 }
 
 .text p {
-	height: var(--size-6);
 	line-height: var(--size-6);
 }
 
@@ -220,6 +220,7 @@ input {
 	font-family: monospace;
 	color: var(--light-2);
 	background-color: var(--dark-2);
+	white-space: nowrap;
 }
 
 .key {

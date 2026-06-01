@@ -36,8 +36,10 @@ export class PaletteController {
 
 	run() {
 		this.render();
-		this.view.renderDownload(this.model.getFileData());
 		this.bindEvents();
+		this.model
+			.getModData("MyPalette")
+			.then((href) => this.view.renderDownload(href));
 	}
 
 	render() {
@@ -84,6 +86,8 @@ export class PaletteController {
 	updateSwatch(props: ViewProps) {
 		this.model.updateURL();
 		this.view.render(this.selectedPlayer!, props, true);
-		this.view.renderDownload(this.model.getFileData());
+		this.model
+			.getModData("MyPalette")
+			.then((href) => this.view.renderDownload(href));
 	}
 }
