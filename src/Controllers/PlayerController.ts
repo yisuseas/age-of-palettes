@@ -78,13 +78,29 @@ export class PlayerController {
 				// @ts-expect-error
 				const inputElement = this.view[space][channel] as HTMLInputElement;
 
-				inputElement.addEventListener("input", () => {
+				const handleInput = () => {
 					const value = validate(inputElement.value, channel);
 					if (typeof value !== "number") return;
 					const clone = this.model.unit[space]().object();
 					clone[channel] = value;
 					updateColor(new Color(clone), space);
-				});
+				};
+
+				inputElement.addEventListener("input", () => handleInput());
+
+				const controls = inputElement.nextElementSibling;
+				controls
+					?.querySelector("button.increase")
+					?.addEventListener("click", () => {
+						inputElement.stepUp();
+						handleInput();
+					});
+				controls
+					?.querySelector("button.decrease")
+					?.addEventListener("click", () => {
+						inputElement.stepDown();
+						handleInput();
+					});
 			});
 		});
 	}

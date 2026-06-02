@@ -169,6 +169,44 @@ input {
 	object-fit: cover;
 }
 
+/* Number Input */
+
+.number-input {
+	display: grid;
+	grid-template-rows: repeat(2, 1fr);
+	grid-template-columns: 1fr min-content;
+}
+
+.number-input input {
+	grid-row: span 2 / span 2;
+	border-right-width: 0.5px;
+	appearance: textfield;
+}
+
+.controls {
+	display: contents;
+}
+
+.btn.increase,
+.btn.decrease {
+	border-color: var(--light-1);
+	display: inline-grid;
+	place-items: center;
+	width: 12px;
+	height: 12px;
+	font-size: 14px;
+	line-height: 0.5;
+	padding: 0;
+	border-left-width: 0.5px;
+}
+
+.btn.increase {
+	border-bottom-width: 0.5px;
+}
+.btn.decrease {
+	border-top-width: 0.5px;
+}
+
 /* Icon buttons */
 
 .icon-buttons {
@@ -296,7 +334,13 @@ input:focus-visible {
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
 	margin: 0;
+}
+
+input[type="number"] {
+	appearance: textfield;
+	-moz-appearance: textfield;
 }
 
 svg {
