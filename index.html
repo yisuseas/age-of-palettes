@@ -9,294 +9,108 @@
 	</head>
 	<body>
 		<div id="app">
-			<ul id="player-list">
-				<li id="Player 1"><button class="btn">P1</button></li>
-				<li id="Player 2"><button class="btn">P2</button></li>
-				<li id="Player 3"><button class="btn">P3</button></li>
-				<li id="Player 4"><button class="btn">P4</button></li>
-				<li id="Player 5"><button class="btn">P5</button></li>
-				<li id="Player 6"><button class="btn">P6</button></li>
-				<li id="Player 7"><button class="btn">P7</button></li>
-				<li id="Player 8"><button class="btn">P8</button></li>
-				<li id="Gaia"><button class="btn">G</button></li>
-			</ul>
-			<div id="preview-all">
-				<img
-					name="Player 1"
-					src="/preview.png"
-					width="1780"
-					height="780"
-					alt="preview p1"
-				/>
-				<img
-					name="Player 2"
-					src="/preview.png"
-					width="1780"
-					height="780"
-					alt="preview p2"
-				/>
-				<img
-					name="Player 3"
-					src="/preview.png"
-					width="1780"
-					height="780"
-					alt="preview p3"
-				/>
-				<img
-					name="Player 4"
-					src="/preview.png"
-					width="1780"
-					height="780"
-					alt="preview p4"
-				/>
-				<img
-					name="Player 5"
-					src="/preview.png"
-					width="1780"
-					height="780"
-					alt="preview p5"
-				/>
-				<img
-					name="Player 6"
-					src="/preview.png"
-					width="1780"
-					height="780"
-					alt="preview p6"
-				/>
-				<img
-					name="Player 7"
-					src="/preview.png"
-					width="1780"
-					height="780"
-					alt="preview p7"
-				/>
-				<img
-					name="Player 8"
-					src="/preview.png"
-					width="1780"
-					height="780"
-					alt="preview p8"
-				/>
-				<img
-					name="Gaia"
-					src="/preview.png"
-					width="1780"
-					height="780"
-					alt="preview gaia"
-				/>
+			<div class="sidebar">
+				<ul id="player-list"></ul>
+				<div class="icon-buttons">
+					<button id="open-tutorial" class="btn">?</button>
+					<a
+						id="download"
+						class="btn"
+						download="MyPalette.zip"
+						type="application/zip"
+					>
+						<svg role="presentation" aria-hidden="true">
+							<use href="/icons.svg#download-icon"></use>
+						</svg>
+					</a>
+				</div>
+			</div>
+			<div id="player-properties" class="hidden">
+				<h2></h2>
+				<ul id="property-list"></ul>
 			</div>
 			<div id="editor" class="hidden">
-				<h2></h2>
-				<div class="inputs">
+				<h3></h3>
+				<div id="editor-inputs">
 					<input class="btn" type="color" name="picker" id="picker" />
 					<div class="row">
 						<label for="hex">HEX</label>
 						<input type="text" name="hex" id="hex" autocomplete="off" />
 					</div>
-					<div class="row">
-						<span>RGB</span>
-						<div class="number-input">
-							<input
-								type="number"
-								name="rgb-r"
-								id="rgb-r"
-								min="0"
-								max="255"
-								step="1"
-							/>
-							<div class="controls">
-								<button class="btn increase">+</button>
-								<button class="btn decrease">-</button>
-							</div>
-						</div>
-						<div class="number-input">
-							<input
-								type="number"
-								name="rgb-g"
-								id="rgb-g"
-								min="0"
-								max="255"
-								step="1"
-							/>
-							<div class="controls">
-								<button class="btn increase">+</button>
-								<button class="btn decrease">-</button>
-							</div>
-						</div>
-						<div class="number-input">
-							<input
-								type="number"
-								name="rgb-b"
-								id="rgb-b"
-								min="0"
-								max="255"
-								step="1"
-							/>
-							<div class="controls">
-								<button class="btn increase">+</button>
-								<button class="btn decrease">-</button>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<span>HSV</span>
-						<div class="number-input">
-							<input
-								type="number"
-								name="hsv-h"
-								id="hsv-h"
-								min="0"
-								max="360"
-								step="1"
-							/>
-							<div class="controls">
-								<button class="btn increase">+</button>
-								<button class="btn decrease">-</button>
-							</div>
-						</div>
-						<div class="number-input">
-							<input
-								type="number"
-								name="hsv-s"
-								id="hsv-s"
-								min="0"
-								max="100"
-								step="1"
-							/>
-							<div class="controls">
-								<button class="btn increase">+</button>
-								<button class="btn decrease">-</button>
-							</div>
-						</div>
-						<div class="number-input">
-							<input
-								type="number"
-								name="hsv-v"
-								id="hsv-v"
-								min="0"
-								max="100"
-								step="1"
-							/>
-							<div class="controls">
-								<button class="btn increase">+</button>
-								<button class="btn decrease">-</button>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<span>HSL</span>
-						<div class="number-input">
-							<input
-								type="number"
-								name="hsl-h"
-								id="hsl-h"
-								min="0"
-								max="360"
-								step="1"
-							/>
-							<div class="controls">
-								<button class="btn increase">+</button>
-								<button class="btn decrease">-</button>
-							</div>
-						</div>
-						<div class="number-input">
-							<input
-								type="number"
-								name="hsl-s"
-								id="hsl-s"
-								min="0"
-								max="100"
-								step="1"
-							/>
-							<div class="controls">
-								<button class="btn increase">+</button>
-								<button class="btn decrease">-</button>
-							</div>
-						</div>
-						<div class="number-input">
-							<input
-								type="number"
-								name="hsl-l"
-								id="hsl-l"
-								min="0"
-								max="100"
-								step="1"
-							/>
-							<div class="controls">
-								<button class="btn increase">+</button>
-								<button class="btn decrease">-</button>
-							</div>
-						</div>
-					</div>
 				</div>
-				<img
-					id="preview"
-					src="/preview.png"
-					width="1780"
-					height="780"
-					alt="preview"
-				/>
 			</div>
-			<div class="icon-buttons">
-				<button id="open-tutorial" class="btn">?</button>
-				<a
-					id="download"
-					class="btn"
-					download="MyPalette.zip"
-					type="application/zip"
-				>
-					<svg role="presentation" aria-hidden="true">
-						<use href="/icons.svg#download-icon"></use>
-					</svg>
-				</a>
+			<div class="preview">
+				<canvas id="preview-canvas"> </canvas>
 			</div>
-			<dialog id="tutorial">
-				<div class="text">
-					<p>
-						Click on the colored buttons in the left side bar, the images
-						in the grid, or press
-						<span class="key">Shift</span>
-						+ (
-						<span class="key">1</span>
-						-
-						<span class="key">9</span>
-						) to select a player. Now you can edit the player's color.
-					</p>
-					<p>
-						Select the same player again or press
-						<span class="key">Esc</span>
-						to go back to the full preview.
-					</p>
-					<p>
-						Your changes will be reflected on the url, so you can save it
-						as a bookmark in your browser or easily share it.
-					</p>
-					<p>
-						To use your palette in game, click on the
-						<span class="fake btn">
-							<svg role="presentation" aria-hidden="true">
-								<use href="/icons.svg#download-icon"></use>
-							</svg>
-						</span>
-						button on the bottom left, this will download
-						<span class="mono">MyPalette.zip</span>. Extract its contents
-						to your local mods folder:
-						<span class="mono">
-							C:\Users\USERNAME\Games\Age of Empires 2
-							DE\BIG_NUMBER\mods\local
-						</span>
-					</p>
-					<p>
-						You can see this tutorial anytime by pressing the
-						<span class="fake btn">?</span>
-						button on the sidebar or the
-						<span class="key">F1</span>
-						key in your keyboard.
-					</p>
-				</div>
-				<button class="btn" id="close-tutorial" type="button">Close</button>
-			</dialog>
 		</div>
+
+		<dialog id="tutorial">
+			<div class="text">
+				<p>
+					Click on the colored buttons in the left side bar, the images in the grid,
+					or press
+					<span class="key">Shift</span>
+					+ (
+					<span class="key">1</span>
+					-
+					<span class="key">9</span>
+					) to select a player. Now you can edit the player's color.
+				</p>
+				<p>
+					Select the same player again or press
+					<span class="key">Esc</span>
+					to go back to the full preview.
+				</p>
+				<p>
+					Your changes will be reflected on the url, so you can save it as a bookmark
+					in your browser or easily share it.
+				</p>
+				<p>
+					To use your palette in game, click on the
+					<span class="fake btn">
+						<svg role="presentation" aria-hidden="true">
+							<use href="/icons.svg#download-icon"></use>
+						</svg>
+					</span>
+					button on the bottom left, this will download
+					<span class="mono">MyPalette.zip</span>. Extract its contents to your local
+					mods folder:
+					<span class="mono">
+						C:\Users\USERNAME\Games\Age of Empires 2 DE\BIG_NUMBER\mods\local
+					</span>
+				</p>
+				<p>
+					You can see this tutorial anytime by pressing the
+					<span class="fake btn">?</span>
+					button on the sidebar or the
+					<span class="key">F1</span>
+					key in your keyboard.
+				</p>
+			</div>
+			<button class="btn" id="close-tutorial" type="button">Close</button>
+		</dialog>
+
+		<template id="player-list-item">
+			<li><button class="btn"></button></li>
+		</template>
+		<template id="property-list-item">
+			<li><button class="btn"></button></li>
+		</template>
+		<template id="number-input-row">
+			<div class="row">
+				<span class="color-space-name"></span>
+			</div>
+		</template>
+		<template id="number-input-item">
+			<div class="number-input">
+				<input type="number" step="1" min="0" />
+				<div class="controls">
+					<button class="btn increase">+</button>
+					<button class="btn decrease">-</button>
+				</div>
+			</div>
+		</template>
+
 		<script type="module" src="/src/main.ts"></script>
 	</body>
 </html>

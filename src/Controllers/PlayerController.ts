@@ -1,6 +1,6 @@
 import Color, { type ColorInstance } from "color";
 import type { PlayerView } from "../Views/PlayerView";
-import type { ColorEditor, EventMap, PlayerName } from "../types";
+import type { ColorInput, EventMap, PlayerName, PlayerProperty } from "../types";
 import type { App } from "../App";
 import { PlayerModel } from "../Models/PlayerModel";
 
@@ -22,11 +22,13 @@ export class PlayerController {
 	model: PlayerModel;
 	view: PlayerView;
 	app: App;
+	selectedSwatch: PlayerProperty | null;
 
 	constructor(model: PlayerModel, view: PlayerView, app: App) {
 		this.model = model;
 		this.view = view;
 		this.app = app;
+		this.selectedSwatch = null;
 	}
 
 	set(payload: EventMap["change-player"]) {
@@ -43,13 +45,15 @@ export class PlayerController {
 	}
 
 	private render(name: PlayerName) {
-		this.view.render(name, this.model.unit);
+		this.view.renderEditor(name, this.model.Unit);
+		this.view.renderSwatchSelect(this.model.getSwatches(), this.selectedSwatch);
 	}
 
 	private bindEvents() {
-		const updateColor = (newColor: ColorInstance, skip?: ColorEditor) => {
-			this.model.set(newColor);
+		const updateColor = (newColor: ColorInstance, skip?: ColorInput) => {
+			this.model.set("Unit", newColor);
 			this.view.updateEditor(newColor, skip);
+			this.view.updateSwatchSelect(this.selectedSwatch!, newColor.toString(), true);
 			this.app.dispatch("change-swatch", this.model.props());
 		};
 
@@ -81,7 +85,7 @@ export class PlayerController {
 				const handleInput = () => {
 					const value = validate(inputElement.value, channel);
 					if (typeof value !== "number") return;
-					const clone = this.model.unit[space]().object();
+					const clone = this.model.Unit[space]().object();
 					clone[channel] = value;
 					updateColor(new Color(clone), space);
 				};
@@ -89,18 +93,14 @@ export class PlayerController {
 				inputElement.addEventListener("input", () => handleInput());
 
 				const controls = inputElement.nextElementSibling;
-				controls
-					?.querySelector("button.increase")
-					?.addEventListener("click", () => {
-						inputElement.stepUp();
-						handleInput();
-					});
-				controls
-					?.querySelector("button.decrease")
-					?.addEventListener("click", () => {
-						inputElement.stepDown();
-						handleInput();
-					});
+				controls?.querySelector("button.increase")?.addEventListener("click", () => {
+					inputElement.stepUp();
+					handleInput();
+				});
+				controls?.querySelector("button.decrease")?.addEventListener("click", () => {
+					inputElement.stepDown();
+					handleInput();
+				});
 			});
 		});
 	}

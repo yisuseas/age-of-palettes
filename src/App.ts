@@ -22,11 +22,7 @@ export class App {
 			playerView,
 			this
 		);
-		this.paletteController = new PaletteController(
-			paletteModel,
-			paletteView,
-			this
-		);
+		this.paletteController = new PaletteController(paletteModel, paletteView, this);
 	}
 
 	run() {
@@ -40,9 +36,7 @@ export class App {
 		if (eventName === "change-player") {
 			this.playerController.set(payload as EventMap["change-player"]);
 		} else if (eventName === "change-swatch") {
-			this.paletteController.updateSwatch(
-				payload as EventMap["change-swatch"]
-			);
+			this.paletteController.updateSwatch(payload as EventMap["change-swatch"]);
 		}
 	}
 
@@ -55,12 +49,8 @@ export class App {
 			}
 		});
 
-		const openBtn = document.getElementById(
-			"open-tutorial"
-		) as HTMLButtonElement;
-		const closeBtn = document.getElementById(
-			"close-tutorial"
-		) as HTMLButtonElement;
+		const openBtn = document.getElementById("open-tutorial") as HTMLButtonElement;
+		const closeBtn = document.getElementById("close-tutorial") as HTMLButtonElement;
 		openBtn.addEventListener("click", () => dialog.showModal());
 		closeBtn.addEventListener("click", () => dialog.close());
 

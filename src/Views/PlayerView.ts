@@ -1,9 +1,11 @@
 import type { ColorInstance } from "color";
-import type { ColorEditor, PlayerName } from "../types";
+import type { ColorInput, PlayerName, PlayerProperty } from "../types";
+import { PLAYER_PROPERTIES } from "../constant";
 
 export class PlayerView {
 	editor: HTMLDivElement;
 	title: HTMLHeadingElement;
+	swatchList: HTMLUListElement;
 	picker: HTMLInputElement;
 	hex: HTMLInputElement;
 	rgb: {
@@ -26,6 +28,7 @@ export class PlayerView {
 	constructor() {
 		this.editor = document.querySelector("div#editor")!;
 		this.title = this.editor.querySelector("h2")!;
+		this.swatchList = document.querySelector("ul#swatch-list")!;
 		this.picker = document.querySelector("input#picker")!;
 		this.hex = document.querySelector("input#hex")!;
 		this.rgb = {
@@ -46,13 +49,13 @@ export class PlayerView {
 		this.preview = document.querySelector("img#preview")!;
 	}
 
-	render(name: PlayerName, color: ColorInstance) {
+	renderEditor(name: PlayerName, color: ColorInstance) {
 		this.editor.classList.remove("hidden");
 		this.title.textContent = name;
 		this.updateEditor(color);
 	}
 
-	updateEditor(color: ColorInstance, skip?: ColorEditor) {
+	updateEditor(color: ColorInstance, skip?: ColorInput) {
 		const hex = color.hex();
 		if (skip !== "picker") {
 			this.picker.value = hex;
@@ -92,6 +95,23 @@ export class PlayerView {
 		}
 
 		this.preview.style.backgroundColor = color.toString();
+	}
+
+	renderSwatchSelect(btnBackgrounds: string[], selectedSwatch: PlayerProperty | null) {
+		PLAYER_PROPERTIES.forEach((swatch, idx) => {
+			this.updateSwatchSelect(swatch, btnBackgrounds[idx], selectedSwatch === swatch);
+		});
+	}
+
+	updateSwatchSelect(swatch: PlayerProperty, background: string, isSelected: boolean) {
+		const li = document.getElementById(swatch)!;
+		if (isSelected) {
+			li.classList.add("selected");
+		} else {
+			li.classList.remove("selected");
+		}
+		const btn = li.querySelector("button")!;
+		btn.style.backgroundColor = background;
 	}
 
 	clear() {

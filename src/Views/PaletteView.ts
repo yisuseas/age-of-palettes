@@ -12,9 +12,7 @@ export class PaletteView {
 	}
 
 	private getImg(name: PlayerName) {
-		return this.previewAll.querySelector(
-			`img[name="${name}"]`
-		) as HTMLImageElement;
+		return this.previewAll.querySelector(`img[name="${name}"]`) as HTMLImageElement;
 	}
 
 	render(name: PlayerName, props: ViewProps, isSelected: boolean) {

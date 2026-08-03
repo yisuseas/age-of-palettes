@@ -1,4 +1,4 @@
-import { ALL_PLAYER_NAMES } from "../constant";
+import { PLAYER_NAMES } from "../constant";
 import type { PaletteModel } from "../Models/PaletteModel";
 import type { PlayerName, ViewProps } from "../types";
 import type { PaletteView } from "../Views/PaletteView";
@@ -37,9 +37,7 @@ export class PaletteController {
 	run() {
 		this.render();
 		this.bindEvents();
-		this.model
-			.getModData("MyPalette")
-			.then((href) => this.view.renderDownload(href));
+		this.model.getModData("MyPalette").then((href) => this.view.renderDownload(href));
 	}
 
 	render() {
@@ -48,7 +46,7 @@ export class PaletteController {
 
 	private bindEvents() {
 		const previewAll = document.getElementById("preview-all")!;
-		ALL_PLAYER_NAMES.forEach((name, idx) => {
+		PLAYER_NAMES.forEach((name, idx) => {
 			const handleClick = () => {
 				this.toggleSelected(name);
 			};
@@ -68,7 +66,7 @@ export class PaletteController {
 				this.toggleSelected(this.selectedPlayer);
 			} else if (modKey.isPressed && validPlayerCode.test(event.code)) {
 				const idx = parseInt(event.code.replace(keyPrefix, "")) - 1;
-				this.toggleSelected(ALL_PLAYER_NAMES[idx]);
+				this.toggleSelected(PLAYER_NAMES[idx]);
 			}
 		});
 	}
@@ -76,9 +74,7 @@ export class PaletteController {
 	private toggleSelected(toggledName: PlayerName) {
 		const name = this.selectedPlayer !== toggledName ? toggledName : null;
 		this.selectedPlayer = name;
-		const payload = name
-			? { name, model: this.model.playerData[name] }
-			: null;
+		const payload = name ? { name, model: this.model.playerData[name] } : null;
 		this.app.dispatch("change-player", payload);
 		this.render();
 	}
@@ -86,8 +82,6 @@ export class PaletteController {
 	updateSwatch(props: ViewProps) {
 		this.model.updateURL();
 		this.view.render(this.selectedPlayer!, props, true);
-		this.model
-			.getModData("MyPalette")
-			.then((href) => this.view.renderDownload(href));
+		this.model.getModData("MyPalette").then((href) => this.view.renderDownload(href));
 	}
 }

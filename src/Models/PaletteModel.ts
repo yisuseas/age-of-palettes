@@ -1,6 +1,6 @@
 import type {
-	ColorTables,
-	PlayerColors,
+	ColorTableMap,
+	SpriteColorMap,
 	PlayerName,
 	SpriteColors,
 	UIColors,
@@ -8,13 +8,9 @@ import type {
 } from "../types";
 import JSZip from "jszip";
 import { PlayerModel } from "./PlayerModel";
-import { ALL_PLAYER_NAMES, PLAYER_COLOR_NAMES } from "../constant";
+import { PLAYER_NAMES, PLAYER_NAME_UI_MAP } from "../constant";
 
 const SEARCH_KEY = "palette";
-
-const PLAYER_SEPARATOR = "-";
-
-const VALID_PATTERN = /^([\da-f]{6}-){8}[\da-f]{6}$/i;
 
 export class PaletteModel {
 	playerData: Record<PlayerName, PlayerModel>;
@@ -24,22 +20,21 @@ export class PaletteModel {
 		const urlPalette = search.get(SEARCH_KEY);
 		let genPlayerModel: (name: PlayerName, idx: number) => PlayerModel;
 
-		if (urlPalette && VALID_PATTERN.test(urlPalette)) {
+		if (urlPalette && PALETTE_RE.test(urlPalette)) {
 			const hexColors = urlPalette.split(PLAYER_SEPARATOR);
-			genPlayerModel = (_name, idx) =>
-				PlayerModel.fromString(hexColors[idx]);
+			genPlayerModel = (_name, idx) => PlayerModel.fromString(hexColors[idx]);
 		} else {
 			genPlayerModel = (name, _idx) => PlayerModel.fromDefault(name);
 		}
 
 		this.playerData = Object.fromEntries(
-			ALL_PLAYER_NAMES.map((name, idx) => [name, genPlayerModel(name, idx)])
+			PLAYER_NAMES.map((name, idx) => [name, genPlayerModel(name, idx)])
 		) as Record<PlayerName, PlayerModel>;
 	}
 
 	updateURL() {
-		const searchValue = ALL_PLAYER_NAMES.map((name) =>
-			this.playerData[name].hexString()
+		const searchValue = PLAYER_NAMES.map((name) =>
+			this.playerData[name].toString()
 		).join(PLAYER_SEPARATOR);
 		const url = new URL(window.location.toString());
 		url.searchParams.set(SEARCH_KEY, searchValue);
@@ -47,33 +42,31 @@ export class PaletteModel {
 	}
 
 	getAll(): [PlayerName, ViewProps][] {
-		return ALL_PLAYER_NAMES.map((name) => [
-			name,
-			this.playerData[name].props(),
-		]);
+		return PLAYER_NAMES.map((name) => [name, this.playerData[name].props()]);
 	}
 
 	private getFileDataSprite() {
-		const playerColors = Object.fromEntries(
-			ALL_PLAYER_NAMES.map((name) => [
-				name,
-				this.playerData[name].playerColors(),
-			])
-		) as PlayerColors;
+		const unitColors: Partial<SpriteColorMap> = {};
+		const outlineColors: Partial<SpriteColorMap> = {};
+		PLAYER_NAMES.forEach((name) => {
+			const [unit, outline] = this.playerData[name].colorJSON();
+			unitColors[name] = unit;
+			outlineColors[name] = outline;
+		});
 		const spriteColors: SpriteColors = {
-			TeamColors: playerColors,
-			OutlineColors: playerColors,
+			TeamColors: unitColors as SpriteColorMap,
+			OutlineColors: outlineColors as SpriteColorMap,
 		};
 		return JSON.stringify(spriteColors);
 	}
 
 	private getFileDataUI() {
 		const colorTables = Object.fromEntries(
-			ALL_PLAYER_NAMES.map((name) => [
-				PLAYER_COLOR_NAMES[name],
+			PLAYER_NAMES.map((name) => [
+				PLAYER_NAME_UI_MAP[name],
 				this.playerData[name].uiColors(),
 			])
-		) as ColorTables;
+		) as ColorTableMap;
 		const uiColors: UIColors = {
 			PresetColors: {
 				ScoreInfoText: [213, 213, 213, 255],

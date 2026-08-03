@@ -1,20 +1,22 @@
 import type { ColorInstance } from "color";
-import Color from "color";
 import type {
-	ColorJSON,
+	ColorDefSprite,
 	PlayerName,
-	PlayerUIColors,
-	UIRGBA,
+	PlayerProperty,
+	PlayerColorUI,
+	PlayerUIElement,
+	ColorDefUI,
 	ViewProps,
 } from "../types";
-import defaultColors from "../spritecolors.json";
+import Color from "color";
+import defaultSpriteColors from "../defaults/spritecolors.json";
+import defaultUIColors from "../defaults/UIColors.json";
+import { PLAYER_PROPERTIES, PLAYER_NAME_UI_MAP } from "../constant";
 
 const WHITE = new Color("white").toString();
 const BLACK = new Color("black").toString();
 
-const LIGHT_DARK_RATIO = 0.15;
-
-function uiColor(color: ColorInstance, alpha = 255): UIRGBA {
+function uiColor(color: ColorInstance, alpha = 255): ColorDefUI {
 	const [r, g, b] = color
 		.rgb()
 		.array()
@@ -22,71 +24,106 @@ function uiColor(color: ColorInstance, alpha = 255): UIRGBA {
 	return [r, g, b, alpha];
 }
 
-export class PlayerModel {
-	unit: ColorInstance;
+const ALL_PLAYER_UI_ELEMENTS: PlayerUIElement[] = [
+	"Text",
+	"TextOutline",
+	"Icons",
+	"HealthBar",
+	"TimelineDark",
+	"TimelineLight",
+	"MiniMap",
+	"TechtreePreviewCiv",
+];
 
-	private constructor(color: ColorInstance) {
-		this.unit = color;
+export class PlayerModel implements Record<PlayerProperty, ColorInstance> {
+	Unit: ColorInstance;
+	UnitOutline: ColorInstance;
+	Text: ColorInstance;
+	TextOutline: ColorInstance;
+	Icons: ColorInstance;
+	HealthBar: ColorInstance;
+	TimelineDark: ColorInstance;
+	TimelineLight: ColorInstance;
+	MiniMap: ColorInstance;
+	TechtreePreviewCiv: ColorInstance;
+
+	private constructor(data: Record<PlayerProperty, ColorInstance>) {
+		this.Unit = data.Unit;
+		this.UnitOutline = data.UnitOutline;
+		this.Text = data.Text;
+		this.TextOutline = data.TextOutline;
+		this.Icons = data.Icons;
+		this.HealthBar = data.HealthBar;
+		this.TimelineDark = data.TimelineDark;
+		this.TimelineLight = data.TimelineLight;
+		this.MiniMap = data.MiniMap;
+		this.TechtreePreviewCiv = data.TechtreePreviewCiv;
 	}
 
 	static fromString(str: string) {
-		const color = new Color(`#${str}`);
-		return new PlayerModel(color);
+		const list = str.split(SWATCH_SEPARATOR);
+		return new PlayerModel(
+			Object.fromEntries(
+				PLAYER_PROPERTIES.map((swatch, idx) => [swatch, new Color(`#${list[idx]}`)])
+			) as Record<PlayerProperty, ColorInstance>
+		);
 	}
 
 	static fromDefault(name: PlayerName) {
-		const original = defaultColors.TeamColors[name].FloatRGBA;
-		const color = Color.rgb(
-			original.r * 255,
-			original.g * 255,
-			original.b * 255
-		);
-		return new PlayerModel(color);
+		const fromFloatRGBA = ({ FloatRGBA: { r, g, b } }: ColorDefSprite) =>
+			Color.rgb(r * 255, g * 255, b * 255);
+
+		const colorTable = defaultUIColors.ColorTables[PLAYER_NAME_UI_MAP[name]];
+		const fromUIRGBA = ([r, g, b]: number[]) => Color.rgb(r, g, b);
+
+		return new PlayerModel({
+			Unit: fromFloatRGBA(defaultSpriteColors.TeamColors[name]),
+			UnitOutline: fromFloatRGBA(defaultSpriteColors.OutlineColors[name]),
+			Text: fromUIRGBA(colorTable.Text),
+			TextOutline: fromUIRGBA(colorTable.TextOutline),
+			Icons: fromUIRGBA(colorTable.Icons),
+			HealthBar: fromUIRGBA(colorTable.HealthBar),
+			TimelineDark: fromUIRGBA(colorTable.TimelineDark),
+			TimelineLight: fromUIRGBA(colorTable.TimelineLight),
+			MiniMap: fromUIRGBA(colorTable.MiniMap),
+			TechtreePreviewCiv: fromUIRGBA(colorTable.TechtreePreviewCiv),
+		});
 	}
 
-	playerColors(): ColorJSON {
-		const [r, g, b] = this.unit
-			.rgb()
-			.array()
-			.map((n) => n / 255);
-		return {
-			FloatRGBA: { r, g, b, a: 1.0 },
-		};
+	colorJSON(): [ColorDefSprite, ColorDefSprite] {
+		return (["Unit", "UnitOutline"] as const).map((key) => {
+			const [r, g, b] = this[key]
+				.rgb()
+				.array()
+				.map((n) => n / 255);
+			return {
+				FloatRGBA: { r, g, b, a: 1.0 },
+			};
+		}) as [ColorDefSprite, ColorDefSprite];
 	}
 
-	uiColors(): PlayerUIColors {
-		const base = uiColor(this.unit);
-		const darker = uiColor(new Color(this.unit).darken(LIGHT_DARK_RATIO));
-		const lighter = uiColor(new Color(this.unit).lighten(LIGHT_DARK_RATIO));
-		const textOutline: UIRGBA = this.unit.isLight()
-			? [0, 0, 0, 255]
-			: [255, 255, 255, 128];
-		return {
-			Text: base,
-			TextOutline: textOutline,
-			Icons: base,
-			HealthBar: base,
-			TimelineDark: darker,
-			TimelineLight: lighter,
-			MiniMap: base,
-			TechtreePreviewCiv: base,
-		};
+	uiColors(): PlayerColorUI {
+		return Object.fromEntries(
+			ALL_PLAYER_UI_ELEMENTS.map((swatch) => [swatch, uiColor(this[swatch])])
+		) as PlayerColorUI;
 	}
 
 	background() {
-		return this.unit.toString();
+		return this.Unit.toString();
 	}
 
 	foreground() {
-		return this.unit.isLight() ? BLACK : WHITE;
+		return this.Unit.isLight() ? BLACK : WHITE;
 	}
 
-	hexString() {
-		return this.unit.hex().replace("#", "");
+	toString() {
+		return PLAYER_PROPERTIES.map((swatch) => this[swatch].hex().replace("#", "")).join(
+			SWATCH_SEPARATOR
+		);
 	}
 
-	set(unit: ColorInstance) {
-		this.unit = unit;
+	set(swatch: PlayerProperty, color: ColorInstance) {
+		this[swatch] = color;
 	}
 
 	props(): ViewProps {
@@ -94,5 +131,9 @@ export class PlayerModel {
 			bg: this.background(),
 			fg: this.foreground(),
 		};
+	}
+
+	getSwatches() {
+		return PLAYER_PROPERTIES.map((swatch) => this[swatch].toString());
 	}
 }
