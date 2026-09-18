@@ -9,7 +9,7 @@ import {
 	PLAYER_NAMES,
 	PLAYER_PROPERTIES,
 } from "../constant";
-import { getElementById, kebab } from "../utils";
+import { getElementById, kebab, objectFromEntries } from "../utils";
 
 const VALID_PLAYER_CODE = /^(Digit|Numpad)[1-9]$/;
 const KEY_PREFIX = /Digit|Numpad/;
@@ -54,7 +54,7 @@ export default class AppController {
 		const iconColors = PLAYER_NAMES.map((playerName) =>
 			this.model.getColor(playerName, "Icons")
 		);
-		this.view.initialRender(iconColors);
+		this.view.initialRender(iconColors, this.previewColors());
 		this.bindEvents();
 	}
 
@@ -67,7 +67,7 @@ export default class AppController {
 			}
 		});
 		const openBtn = getElementById<HTMLButtonElement>("open-tutorial");
-		const closeBtn = getElementById<HTMLButtonElement>("open-tutorial");
+		const closeBtn = getElementById<HTMLButtonElement>("close-tutorial");
 		openBtn.addEventListener("click", () => dialog.showModal());
 		closeBtn.addEventListener("click", () => dialog.close());
 		if (!window.localStorage.getItem(TUTORIAL_STORAGE_KEY)) {
@@ -177,11 +177,49 @@ export default class AppController {
 		});
 	}
 
-	private togglePlayer(playerName: PlayerName) {
-		this.selected.player = this.selected.player !== playerName ? playerName : null;
+	// TODO: Move this to AppModel and add return type to types.ts
+	private previewColors() {
+		return objectFromEntries(
+			(["Unit", "UnitOutline"] as const).map((prop) => [
+				prop,
+				PLAYER_NAMES.map((playerName) => this.model.getColor(playerName, prop)),
+			])
+		);
 	}
 
-	private toggleProperty(property: PlayerProperty) {
-		this.selected.property = this.selected.property !== property ? property : null;
+	private togglePlayer(playerName: PlayerName): void {
+		const prev = { ...this.selected };
+		const next =
+			this.selected.player !== playerName
+				? { player: playerName, property: prev.property }
+				: { player: null, property: null };
+		this.selected = next as SelectedState;
+		this.view.updateSelectedListItem<PlayerName>(prev.player, next.player);
+
+		if (next.player) {
+			const palettePlayer = this.model.getPlayer(playerName);
+			const colors = Object.values(palettePlayer);
+			this.view.showPlayerProperties(playerName, colors);
+			next.property && this.view.updateEditor(palettePlayer[next.property]);
+			this.view.updatePreviewSingle(palettePlayer);
+		} else {
+			this.view.hidePlayerProperties();
+			this.view.updateSelectedListItem<PlayerProperty>(prev.property, null);
+			this.view.hideEditor();
+			this.view.updatePreviewAll(this.previewColors());
+		}
+	}
+
+	private toggleProperty(property: PlayerProperty): void {
+		const prev = this.selected.property;
+		const next = this.selected.property !== property ? property : null;
+		this.selected.property = next;
+		this.view.updateSelectedListItem<PlayerProperty>(prev, next);
+		if (this.selected.property) {
+			const color = this.model.getColor(this.selected.player, property);
+			this.view.showEditor(property, color);
+		} else {
+			this.view.hideEditor();
+		}
 	}
 }

@@ -5,17 +5,16 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>age of palettes</title>
-		<link rel="stylesheet" href="./src/styles.css" />
 	</head>
 	<body>
 		<div id="app">
 			<div class="sidebar">
 				<ul id="player-list"></ul>
 				<div class="icon-buttons">
-					<button id="open-tutorial" class="btn">?</button>
+					<button id="open-tutorial" class="btn square">?</button>
 					<a
 						id="download"
-						class="btn"
+						class="btn square"
 						download="MyPalette.zip"
 						type="application/zip"
 					>
@@ -25,22 +24,22 @@
 					</a>
 				</div>
 			</div>
-			<div id="player-properties" class="hidden">
-				<h2></h2>
-				<ul id="property-list"></ul>
+			<div id="player-properties" class="column hidden">
+				<h2 class="title"></h2>
+				<ul id="property-list" class="inner"></ul>
 			</div>
-			<div id="editor" class="hidden">
-				<h3></h3>
-				<div id="editor-inputs">
+			<div class="preview">
+				<canvas id="preview-canvas" width="512" height="512"></canvas>
+			</div>
+			<div id="editor" class="column hidden">
+				<h3 class="title"></h3>
+				<div id="editor-inputs" class="inner">
 					<input class="btn" type="color" name="picker" id="picker" />
 					<div class="row">
 						<label for="hex">HEX</label>
 						<input type="text" name="hex" id="hex" autocomplete="off" />
 					</div>
 				</div>
-			</div>
-			<div class="preview">
-				<canvas id="preview-canvas"> </canvas>
 			</div>
 		</div>
 
@@ -54,7 +53,7 @@
 					<span class="key">1</span>
 					-
 					<span class="key">9</span>
-					) to select a player. Now you can edit the player's color.
+					) to select a player, this will open their list of properties.
 				</p>
 				<p>
 					Select the same player again or press
@@ -62,12 +61,17 @@
 					to go back to the full preview.
 				</p>
 				<p>
-					Your changes will be reflected on the url, so you can save it as a bookmark
-					in your browser or easily share it.
+					Click on any of the player's properties to open the color editor, where you
+					can modify that specific color.
+				</p>
+				<p>
+					Your changes will not only be reflected on the preview to the right, but
+					also on the url, so you can save it as a bookmark in your browser or easily
+					share it.
 				</p>
 				<p>
 					To use your palette in game, click on the
-					<span class="fake btn">
+					<span class="fake btn square">
 						<svg role="presentation" aria-hidden="true">
 							<use href="/icons.svg#download-icon"></use>
 						</svg>
@@ -81,7 +85,7 @@
 				</p>
 				<p>
 					You can see this tutorial anytime by pressing the
-					<span class="fake btn">?</span>
+					<span class="fake btn square">?</span>
 					button on the sidebar or the
 					<span class="key">F1</span>
 					key in your keyboard.
@@ -91,10 +95,10 @@
 		</dialog>
 
 		<template id="player-list-item">
-			<li><button class="btn"></button></li>
+			<li><button class="btn square"></button></li>
 		</template>
 		<template id="property-list-item">
-			<li><button class="btn"></button></li>
+			<li><button class=""></button></li>
 		</template>
 		<template id="number-input-row">
 			<div class="row">

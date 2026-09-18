@@ -1,5 +1,11 @@
 import type { ColorInstance } from "color";
-import type { Channel, ColorInput, PlayerName, PlayerProperty } from "../types";
+import type {
+	Channel,
+	ColorInput,
+	PalettePlayer,
+	PlayerName,
+	PlayerProperty,
+} from "../types";
 import {
 	MAX_CHANNEL_VALUE,
 	MULTI_CHANNEL_SPACES,
@@ -7,6 +13,83 @@ import {
 	PLAYER_PROPERTIES,
 } from "../constant";
 import { getElementById, kebab } from "../utils";
+import previewSrc from "../assets/preview-with-holes.png";
+
+type PreviewAllProps = Extract<PlayerProperty, "UnitOutline" | "Unit">;
+
+type PreviewSingleProps = Extract<
+	PlayerProperty,
+	| "Unit"
+	| "Text"
+	| "TextOutline"
+	| "Icons"
+	| "HealthBar"
+	| "TechtreePreviewCiv"
+	| "TimelineDark"
+	| "TimelineLight"
+	| "MiniMap"
+>;
+
+type PreviewAllColorMap = Record<PreviewAllProps, ColorInstance[]>;
+
+interface Coords {
+	x: number;
+	y: number;
+	r: number;
+}
+
+interface BackgroundCoords {
+	all: Record<PlayerName, Record<PreviewAllProps, Coords>>;
+	single: Record<PreviewSingleProps, Coords>;
+}
+
+const BACKGROUND_COORDS: Readonly<BackgroundCoords> = {
+	all: {
+		"Player 1": { UnitOutline: { x: 93, y: 93, r: 70 }, Unit: { x: 93, y: 93, r: 68 } },
+		"Player 2": {
+			UnitOutline: { x: 256, y: 93, r: 70 },
+			Unit: { x: 256, y: 93, r: 68 },
+		},
+		"Player 3": {
+			UnitOutline: { x: 419, y: 93, r: 70 },
+			Unit: { x: 419, y: 93, r: 68 },
+		},
+		"Player 4": {
+			UnitOutline: { x: 93, y: 256, r: 70 },
+			Unit: { x: 93, y: 256, r: 68 },
+		},
+		"Player 5": {
+			UnitOutline: { x: 256, y: 256, r: 70 },
+			Unit: { x: 256, y: 256, r: 68 },
+		},
+		"Player 6": {
+			UnitOutline: { x: 419, y: 256, r: 70 },
+			Unit: { x: 419, y: 256, r: 68 },
+		},
+		"Player 7": {
+			UnitOutline: { x: 93, y: 419, r: 70 },
+			Unit: { x: 93, y: 419, r: 68 },
+		},
+		"Player 8": {
+			UnitOutline: { x: 256, y: 419, r: 70 },
+			Unit: { x: 256, y: 419, r: 68 },
+		},
+		Gaia: { UnitOutline: { x: 419, y: 419, r: 70 }, Unit: { x: 419, y: 419, r: 68 } },
+	},
+	single: {
+		Unit: { x: 93, y: 93, r: 70 },
+		Text: { x: 256, y: 93, r: 70 },
+		TextOutline: { x: 419, y: 93, r: 70 },
+		Icons: { x: 93, y: 256, r: 70 },
+		HealthBar: { x: 256, y: 256, r: 70 },
+		TechtreePreviewCiv: { x: 419, y: 256, r: 70 },
+		TimelineDark: { x: 93, y: 419, r: 70 },
+		TimelineLight: { x: 256, y: 419, r: 70 },
+		MiniMap: { x: 419, y: 419, r: 70 },
+	},
+};
+
+const TAU = Math.PI * 2;
 
 export default class AppView {
 	playerList: HTMLUListElement;
@@ -30,11 +113,11 @@ export default class AppView {
 		this.imgB = new Image();
 	}
 
-	initialRender(iconColors: ColorInstance[]): void {
+	initialRender(iconColors: ColorInstance[], previewColors: PreviewAllColorMap): void {
 		this.renderAllPlayers(iconColors);
 		this.renderAllProperties();
 		this.renderInputs();
-		this.renderPreview();
+		this.renderPreview(previewColors);
 	}
 
 	private renderAllPlayers(iconColors: ColorInstance[]): void {
@@ -58,6 +141,22 @@ export default class AppView {
 			btn.classList.replace("light", "dark");
 		} else {
 			btn.classList.replace("dark", "light");
+		}
+	}
+
+	updateSelectedListItem<T extends PlayerName | PlayerProperty>(
+		prev: T | null,
+		next: T | null
+	): void {
+		if (prev) {
+			const btn = getElementById<HTMLButtonElement>(kebab(prev));
+			const li = btn.parentElement!;
+			li.classList.remove("selected");
+		}
+		if (next) {
+			const btn = getElementById<HTMLButtonElement>(kebab(next));
+			const li = btn.parentElement!;
+			li.classList.add("selected");
 		}
 	}
 
@@ -102,7 +201,8 @@ export default class AppView {
 				const input = itemClone.querySelector("input")!;
 				input.id = `${space}-${channel}`;
 				input.max = MAX_CHANNEL_VALUE[channel].toString();
-				rowClone.appendChild(itemClone);
+				const div = rowClone.querySelector("div")!;
+				div.appendChild(itemClone);
 			});
 			this.editorInputs.appendChild(rowClone);
 		});
@@ -142,14 +242,49 @@ export default class AppView {
 		this.editor.classList.add("hidden");
 	}
 
-	private renderPreview(): void {
+	private renderPreview(colors: PreviewAllColorMap): void {
 		this.imgA.addEventListener("load", () => {
+			this.updatePreviewAll(colors);
 			console.log("imgA ready");
 		});
-		this.imgB.addEventListener("load", () => {
-			console.log("imgB ready");
+		this.imgB.addEventListener("load", () => console.log("imgB ready"));
+		this.imgA.src = previewSrc;
+		this.imgB.src = previewSrc;
+	}
+
+	updatePreviewAll(colors: PreviewAllColorMap): void {
+		PLAYER_NAMES.forEach((playerName, playerIdx) => {
+			(["UnitOutline", "Unit"] as PreviewAllProps[]).forEach((property) => {
+				const { r, x, y } = BACKGROUND_COORDS.all[playerName][property];
+				this.canvasCtx.fillStyle = colors[property][playerIdx].toString();
+				this.canvasCtx.beginPath();
+				this.canvasCtx.arc(x, y, r, 0, TAU);
+				this.canvasCtx.fill();
+			});
 		});
-		this.imgA.src = "/preview.png";
-		this.imgB.src = "/preview.png";
+		this.canvasCtx.drawImage(this.imgA, 0, 0);
+	}
+
+	updatePreviewSingle(player: PalettePlayer): void {
+		(
+			[
+				"Unit",
+				"Text",
+				"TextOutline",
+				"Icons",
+				"HealthBar",
+				"TechtreePreviewCiv",
+				"TimelineDark",
+				"TimelineLight",
+				"MiniMap",
+			] as PreviewSingleProps[]
+		).forEach((property) => {
+			const { r, x, y } = BACKGROUND_COORDS.single[property];
+			this.canvasCtx.fillStyle = player[property].toString();
+			this.canvasCtx.beginPath();
+			this.canvasCtx.arc(x, y, r, 0, TAU);
+			this.canvasCtx.fill();
+		});
+		this.canvasCtx.drawImage(this.imgB, 0, 0);
 	}
 }
