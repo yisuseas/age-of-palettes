@@ -1,5 +1,4 @@
 import type { ColorInstance } from "color";
-import type { PlayerModel } from "./Models/PlayerModel";
 
 export type PlayerName = "Gaia" | `Player ${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8}`;
 
@@ -62,20 +61,3 @@ export type PalettePlayer = Record<PlayerProperty, ColorInstance>;
 export type Palette = Record<PlayerName, PalettePlayer>;
 
 export type Channel = "r" | "g" | "b" | "h" | "s" | "v" | "l";
-
-/* Events */
-
-export interface ViewProps {
-	bg: string;
-	fg: string;
-}
-
-export type EventMap = {
-	"change-player": {
-		name: PlayerName;
-		model: PlayerModel;
-	} | null;
-	"change-swatch": ViewProps;
-};
-
-export type EventName = keyof EventMap;
