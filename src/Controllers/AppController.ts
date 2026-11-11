@@ -9,7 +9,7 @@ import {
 	PLAYER_NAMES,
 	PLAYER_PROPERTIES,
 } from "../constant";
-import { getElementById, kebab, objectFromEntries } from "../utils";
+import { getElementById, kebab } from "../utils";
 
 const VALID_PLAYER_CODE = /^(Digit|Numpad)[1-9]$/;
 const KEY_PREFIX = /Digit|Numpad/;
@@ -54,7 +54,7 @@ export default class AppController {
 		const iconColors = PLAYER_NAMES.map((playerName) =>
 			this.model.getColor(playerName, "Icons")
 		);
-		this.view.initialRender(iconColors, this.previewColors());
+		this.view.initialRender(iconColors, this.model.getPreviewAllColors());
 		this.bindEvents();
 	}
 
@@ -116,6 +116,7 @@ export default class AppController {
 			}
 			this.view.updateProperty(property, newColor);
 			this.view.updateEditor(newColor, skip);
+			this.view.updatePreviewSingle(this.model.getPlayer(player));
 		};
 
 		const handleHexInput = (skip: ColorInput) => {
@@ -177,14 +178,6 @@ export default class AppController {
 		});
 	}
 
-	// TODO: Move this to AppModel and add return type to types.ts
-	private previewColors() {
-		return objectFromEntries(
-			(["Unit", "UnitOutline"] as const).map((prop) => [
-				prop,
-				PLAYER_NAMES.map((playerName) => this.model.getColor(playerName, prop)),
-			])
-		);
 	}
 
 	private togglePlayer(playerName: PlayerName): void {
@@ -206,7 +199,7 @@ export default class AppController {
 			this.view.hidePlayerProperties();
 			this.view.updateSelectedListItem<PlayerProperty>(prev.property, null);
 			this.view.hideEditor();
-			this.view.updatePreviewAll(this.previewColors());
+			this.view.updatePreviewAll(this.model.getPreviewAllColors());
 		}
 	}
 

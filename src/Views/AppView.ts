@@ -5,6 +5,9 @@ import type {
 	PalettePlayer,
 	PlayerName,
 	PlayerProperty,
+	PreviewAllColorMap,
+	PreviewAllProps,
+	PreviewSingleProps,
 } from "../types";
 import {
 	MAX_CHANNEL_VALUE,
@@ -14,23 +17,6 @@ import {
 } from "../constant";
 import { getElementById, kebab } from "../utils";
 import previewSrc from "../assets/preview-with-holes.png";
-
-type PreviewAllProps = Extract<PlayerProperty, "UnitOutline" | "Unit">;
-
-type PreviewSingleProps = Extract<
-	PlayerProperty,
-	| "Unit"
-	| "Text"
-	| "TextOutline"
-	| "Icons"
-	| "HealthBar"
-	| "TechtreePreviewCiv"
-	| "TimelineDark"
-	| "TimelineLight"
-	| "MiniMap"
->;
-
-type PreviewAllColorMap = Record<PreviewAllProps, ColorInstance[]>;
 
 interface Coords {
 	x: number;

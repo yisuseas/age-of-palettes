@@ -61,3 +61,22 @@ export type PalettePlayer = Record<PlayerProperty, ColorInstance>;
 export type Palette = Record<PlayerName, PalettePlayer>;
 
 export type Channel = "r" | "g" | "b" | "h" | "s" | "v" | "l";
+
+// Preview Props
+
+export type PreviewAllProps = Extract<PlayerProperty, "UnitOutline" | "Unit">;
+
+export type PreviewSingleProps = Extract<
+	PlayerProperty,
+	| "Unit"
+	| "Text"
+	| "TextOutline"
+	| "Icons"
+	| "HealthBar"
+	| "TechtreePreviewCiv"
+	| "TimelineDark"
+	| "TimelineLight"
+	| "MiniMap"
+>;
+
+export type PreviewAllColorMap = Record<PreviewAllProps, ColorInstance[]>;

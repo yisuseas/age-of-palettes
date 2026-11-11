@@ -6,6 +6,7 @@ import type {
 	PalettePlayer,
 	PlayerName,
 	PlayerProperty,
+	PreviewAllColorMap,
 	SpriteColors,
 	UIColors,
 } from "../types";
@@ -210,5 +211,14 @@ export default class AppModel {
 	): void {
 		this.palette[playerName][property] = newColor;
 		this.updateURL();
+	}
+
+	getPreviewAllColors(): PreviewAllColorMap {
+		return objectFromEntries(
+			(["Unit", "UnitOutline"] as const).map((prop) => [
+				prop,
+				PLAYER_NAMES.map((playerName) => this.getColor(playerName, prop)),
+			])
+		);
 	}
 }
