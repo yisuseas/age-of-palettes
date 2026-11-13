@@ -222,6 +222,13 @@ export default class AppView {
 		const heading = this.editor.querySelector("h3")!;
 		heading.textContent = propName;
 		this.updateEditor(color);
+		// Show/Hide copy button
+		const copyBtn = getElementById<HTMLButtonElement>("copy-unit");
+		if (propName === "Unit") {
+			copyBtn.classList.add("hidden");
+		} else {
+			copyBtn.classList.remove("hidden");
+		}
 	}
 
 	hideEditor(): void {

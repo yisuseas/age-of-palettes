@@ -176,8 +176,14 @@ export default class AppController {
 				});
 			});
 		});
-	}
 
+		// Copy Unit color button
+		const copyBtn = getElementById<HTMLButtonElement>("copy-unit");
+		copyBtn.addEventListener("click", () => {
+			if (!this.selected.property || this.selected.property === "Unit") return;
+			const unit = this.model.getColor(this.selected.player, "Unit");
+			updateColor(this.selected.player, this.selected.property, new Color(unit));
+		});
 	}
 
 	private togglePlayer(playerName: PlayerName): void {
