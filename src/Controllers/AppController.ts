@@ -3,6 +3,7 @@ import type { Channel, ColorInput, PlayerName, PlayerProperty } from "../types";
 import type AppModel from "../Models/AppModel";
 import type AppView from "../Views/AppView";
 import Color from "color";
+import { saveAs } from "file-saver";
 import {
 	MAX_CHANNEL_VALUE,
 	MULTI_CHANNEL_SPACES,
@@ -75,6 +76,25 @@ export default class AppController {
 		}
 		dialog.addEventListener("close", () => {
 			window.localStorage.setItem(TUTORIAL_STORAGE_KEY, "true");
+		});
+
+		// Download
+		let downloading = false;
+		const downloadBtn = getElementById<HTMLButtonElement>("download");
+		downloadBtn.addEventListener("click", () => {
+			if (downloading) return; // Download already in progress
+			downloading = true;
+			this.model
+				.modData()
+				.then((data) => {
+					saveAs(data, "MyPalette.zip");
+				})
+				.catch((err) => {
+					console.error(err);
+				})
+				.finally(() => {
+					downloading = false;
+				});
 		});
 
 		// Hotkeys
