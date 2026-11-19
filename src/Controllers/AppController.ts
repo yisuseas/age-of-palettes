@@ -139,19 +139,20 @@ export default class AppController {
 			this.view.updatePreviewSingle(this.model.getPlayer(player));
 		};
 
-		const handleHexInput = (skip: ColorInput) => {
+		const handleHexInput = (input: HTMLInputElement, skip: ColorInput) => {
 			if (!this.selected.property) return; // <- For type safety
-			const newColor = new Color(picker.value);
+			const newColor = new Color(input.value);
 			updateColor(this.selected.player, this.selected.property, newColor, skip);
 		};
 
 		const picker = getElementById<HTMLInputElement>("picker");
-		picker.addEventListener("input", () => handleHexInput("picker"));
+		picker.addEventListener("input", () => handleHexInput(picker, "picker"));
 
 		const hexInput = getElementById<HTMLInputElement>("hex");
 		hexInput.addEventListener("input", () => {
+			console.log(hexInput.value);
 			if (!VALID_HEX.test(hexInput.value)) return;
-			handleHexInput("hex");
+			handleHexInput(hexInput, "hex");
 		});
 
 		const validate = (str: string, channel: Channel) => {
